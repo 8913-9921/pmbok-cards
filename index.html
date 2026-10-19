@@ -1,0 +1,2133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>PMBOK 知识卡片</title>
+<style>
+/* ============================================================
+   全局重置与基础变量
+   ============================================================ */
+:root {
+  --primary: #0abab5;
+  --primary-dark: #089a96;
+  --primary-light: #e0f7f6;
+  --primary-lighter: #f0fbfa;
+  --white: #ffffff;
+  --gray-50: #f8fafa;
+  --gray-100: #f1f5f5;
+  --gray-200: #e2e8e8;
+  --gray-300: #c8d0d0;
+  --gray-500: #6b7b7b;
+  --gray-700: #2d3a3a;
+  --gray-900: #0f1a1a;
+  --green-bg: #e8f5e9;
+  --green-fg: #2e7d32;
+  --blue-bg: #e3f2fd;
+  --blue-fg: #1565c0;
+  --orange-bg: #fff3e0;
+  --orange-fg: #e65100;
+  --purple-bg: #f3e5f5;
+  --purple-fg: #7b1fa2;
+  --red-bg: #fce4ec;
+  --red-fg: #c62828;
+  --gold-bg: #fff8e1;
+  --gold-border: #ffd54f;
+  --shadow-sm: 0 1px 3px rgba(10,186,181,0.08);
+  --shadow-md: 0 4px 16px rgba(10,186,181,0.12);
+  --shadow-lg: 0 8px 32px rgba(10,186,181,0.18);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--gray-50);
+  color: var(--gray-700);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+/* ============================================================
+   顶部粘性头部
+   ============================================================ */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  padding: 16px 20px;
+  box-shadow: 0 2px 12px rgba(10,186,181,0.3);
+}
+.app-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.05em;
+}
+.app-header .subtitle {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.82);
+  margin-top: 2px;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   统计栏
+   ============================================================ */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 16px;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  flex-wrap: wrap;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  min-width: 64px;
+}
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1.2;
+}
+.stat-value.mastered { color: var(--green-fg); }
+.stat-value.review { color: var(--red-fg); }
+.stat-value.unlearned { color: var(--gray-500); }
+.stat-value.favorite { color: #f59e0b; }
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+
+/* 进度条 */
+.progress-wrap {
+  padding: 0 20px 10px;
+  background: var(--white);
+}
+.progress-track {
+  height: 5px;
+  background: var(--gray-200);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #4dd0c8);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.progress-text {
+  font-size: 0.72rem;
+  color: var(--gray-500);
+  text-align: right;
+  margin-top: 3px;
+}
+
+/* ============================================================
+   模式标签
+   ============================================================ */
+.mode-tabs {
+  display: flex;
+  padding: 12px 16px 8px;
+  gap: 8px;
+  background: var(--white);
+}
+.mode-tab {
+  flex: 1;
+  padding: 9px 4px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.mode-tab:hover { border-color: var(--primary); color: var(--primary); }
+.mode-tab.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+/* ============================================================
+   筛选面板
+   ============================================================ */
+.filter-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  background: var(--white);
+  color: var(--gray-500);
+  font-size: 0.82rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--gray-200);
+  user-select: none;
+}
+.filter-toggle .arrow {
+  transition: transform 0.25s ease;
+  font-size: 0.65rem;
+}
+.filter-toggle.open .arrow { transform: rotate(180deg); }
+
+.filter-panel {
+  background: var(--white);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--gray-200);
+}
+.filter-panel.open {
+  max-height: 400px;
+  padding: 12px 16px 14px;
+}
+.filter-group { margin-bottom: 10px; }
+.filter-group:last-child { margin-bottom: 0; }
+.filter-group-label {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.filter-chip {
+  padding: 5px 11px;
+  border-radius: 20px;
+  background: var(--gray-100);
+  color: var(--gray-500);
+  font-size: 0.78rem;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.15s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+.filter-chip:hover { background: var(--primary-light); color: var(--primary-dark); }
+.filter-chip.active {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary-dark);
+}
+.filter-chip .count {
+  display: inline-block;
+  min-width: 16px;
+  text-align: center;
+  font-size: 0.7rem;
+  opacity: 0.85;
+  margin-left: 2px;
+}
+
+/* ============================================================
+   卡片导航与计数器
+   ============================================================ */
+.card-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 16px 10px;
+}
+.card-counter {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  min-width: 90px;
+  text-align: center;
+}
+.nav-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-200);
+  background: var(--white);
+  color: var(--gray-500);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+.nav-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+.nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.shuffle-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--primary);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: 4px;
+}
+.shuffle-btn:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+/* ============================================================
+   卡片容器与翻转
+   ============================================================ */
+.card-stage {
+  perspective: 1200px;
+  padding: 0 16px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.card-body {
+  position: relative;
+  width: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.card-body.flipped {
+  transform: rotateY(180deg);
+}
+.card-face {
+  width: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.card-front {
+  position: relative;
+}
+.card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateY(180deg);
+}
+
+/* ============================================================
+   卡片正面
+   ============================================================ */
+.front-inner {
+  padding: 28px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 280px;
+  justify-content: center;
+}
+.process-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  box-shadow: 0 3px 10px rgba(10,186,181,0.35);
+}
+.front-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.tag-group, .tag-area {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+.process-name-cn {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+.process-name-en {
+  font-size: 0.88rem;
+  color: var(--gray-500);
+  margin-bottom: 18px;
+  font-style: italic;
+}
+.flip-hint {
+  font-size: 0.75rem;
+  color: var(--gray-300);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 状态标记 */
+.status-badges {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+.status-pill {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.status-pill.mastered { background: var(--green-bg); color: var(--green-fg); }
+.status-pill.review { background: var(--red-bg); color: var(--red-fg); }
+.status-pill.fav { background: #fff8e1; color: #f59e0b; }
+
+/* ============================================================
+   卡片背面
+   ============================================================ */
+.back-inner {
+  padding: 22px 20px 20px;
+}
+.back-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  text-align: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--primary-light);
+}
+.itto-section {
+  margin-bottom: 14px;
+}
+.itto-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--gray-700);
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.itto-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.itto-chip {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-200);
+  line-height: 1.4;
+}
+.itto-chip.input-chip { background: #e8f4fd; border-color: #bbdefb; color: #1565c0; }
+.itto-chip.tool-chip { background: #fff3e0; border-color: #ffe0b2; color: #e65100; }
+.itto-chip.output-chip { background: #e8f5e9; border-color: #c8e6c9; color: #2e7d32; }
+
+.key-points {
+  background: var(--gold-bg);
+  border-left: 4px solid var(--gold-border);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 12px 14px;
+  margin-top: 14px;
+}
+.key-points-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #f59e0b;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.key-points-text {
+  font-size: 0.84rem;
+  color: var(--gray-700);
+  line-height: 1.65;
+}
+.mnemonic-section {
+  margin-top: 12px;
+  background: var(--primary-light);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  text-align: center;
+}
+.mnemonic-label {
+  font-size: 0.75rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.mnemonic-text {
+  font-size: 0.88rem;
+  color: var(--gray-900);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   底部操作栏
+   ============================================================ */
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--white);
+  border-top: 1px solid var(--gray-200);
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+}
+.action-btn {
+  flex: 1;
+  max-width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--gray-200);
+  background: var(--white);
+  color: var(--gray-500);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.action-btn .icon { font-size: 1.2rem; line-height: 1; }
+.action-btn:hover { border-color: var(--gray-300); }
+.action-btn.mastered-active {
+  border-color: var(--green-fg);
+  background: var(--green-bg);
+  color: var(--green-fg);
+}
+.action-btn.review-active {
+  border-color: var(--red-fg);
+  background: var(--red-bg);
+  color: var(--red-fg);
+}
+.action-btn.fav-active {
+  border-color: #f59e0b;
+  background: #fff8e1;
+  color: #f59e0b;
+}
+.action-btn.flip-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ============================================================
+   空状态
+   ============================================================ */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--gray-500);
+}
+.empty-state .icon { font-size: 2.8rem; margin-bottom: 12px; }
+.empty-state .msg { font-size: 0.95rem; line-height: 1.6; }
+
+/* ============================================================
+   键盘提示 (仅桌面显示)
+   ============================================================ */
+.kbd-hints {
+  display: none;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px;
+  flex-wrap: wrap;
+}
+.kbd-hint {
+  font-size: 0.7rem;
+  color: var(--gray-300);
+}
+.kbd-hint kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.7rem;
+  margin: 0 2px;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (min-width: 600px) {
+  .app-header { padding: 18px 32px; }
+  .app-header h1 { font-size: 1.8rem; }
+  .card-stage { padding: 0 24px; }
+  .front-inner { padding: 36px 32px 32px; min-height: 320px; }
+  .back-inner { padding: 28px 28px 24px; }
+  .process-name-cn { font-size: 1.8rem; }
+  .kbd-hints { display: flex; }
+  .action-btn { max-width: 130px; padding: 10px 8px; font-size: 0.8rem; }
+  .action-btn .icon { font-size: 1.35rem; }
+}
+
+@media (min-width: 900px) {
+  body { max-width: 720px; margin: 0 auto; }
+  .app-header, .stats-bar, .mode-tabs, .filter-toggle, .filter-panel,
+  .progress-wrap, .action-bar {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .action-bar { left: 50%; transform: translateX(-50%); max-width: 720px; }
+}
+
+/* ============================================================
+   过渡动画
+   ============================================================ */
+.card-stage { transition: opacity 0.2s ease; }
+.card-stage.fading { opacity: 0; }
+
+/* ============================================================
+   全局重置与基础变量
+   ============================================================ */
+:root {
+  --primary: #0abab5;
+  --primary-dark: #089a96;
+  --primary-light: #e0f7f6;
+  --primary-lighter: #f0fbfa;
+  --white: #ffffff;
+  --gray-50: #f8fafa;
+  --gray-100: #f1f5f5;
+  --gray-200: #e2e8e8;
+  --gray-300: #c8d0d0;
+  --gray-500: #6b7b7b;
+  --gray-700: #2d3a3a;
+  --gray-900: #0f1a1a;
+  --green-bg: #e8f5e9;
+  --green-fg: #2e7d32;
+  --blue-bg: #e3f2fd;
+  --blue-fg: #1565c0;
+  --orange-bg: #fff3e0;
+  --orange-fg: #e65100;
+  --purple-bg: #f3e5f5;
+  --purple-fg: #7b1fa2;
+  --red-bg: #fce4ec;
+  --red-fg: #c62828;
+  --gold-bg: #fff8e1;
+  --gold-border: #ffd54f;
+  --shadow-sm: 0 1px 3px rgba(10,186,181,0.08);
+  --shadow-md: 0 4px 16px rgba(10,186,181,0.12);
+  --shadow-lg: 0 8px 32px rgba(10,186,181,0.18);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--gray-50);
+  color: var(--gray-700);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+/* ============================================================
+   顶部粘性头部
+   ============================================================ */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  padding: 16px 20px;
+  box-shadow: 0 2px 12px rgba(10,186,181,0.3);
+}
+.app-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.05em;
+}
+.app-header .subtitle {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.82);
+  margin-top: 2px;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   统计栏
+   ============================================================ */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 16px;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  flex-wrap: wrap;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  min-width: 64px;
+}
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1.2;
+}
+.stat-value.mastered { color: var(--green-fg); }
+.stat-value.review { color: var(--red-fg); }
+.stat-value.unlearned { color: var(--gray-500); }
+.stat-value.favorite { color: #f59e0b; }
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+
+/* 进度条 */
+.progress-wrap {
+  padding: 0 20px 10px;
+  background: var(--white);
+}
+.progress-track {
+  height: 5px;
+  background: var(--gray-200);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #4dd0c8);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.progress-text {
+  font-size: 0.72rem;
+  color: var(--gray-500);
+  text-align: right;
+  margin-top: 3px;
+}
+
+/* ============================================================
+   模式标签
+   ============================================================ */
+.mode-tabs {
+  display: flex;
+  padding: 12px 16px 8px;
+  gap: 8px;
+  background: var(--white);
+}
+.mode-tab {
+  flex: 1;
+  padding: 9px 4px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.mode-tab:hover { border-color: var(--primary); color: var(--primary); }
+.mode-tab.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+/* ============================================================
+   筛选面板
+   ============================================================ */
+.filter-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  background: var(--white);
+  color: var(--gray-500);
+  font-size: 0.82rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--gray-200);
+  user-select: none;
+}
+.filter-toggle .arrow {
+  transition: transform 0.25s ease;
+  font-size: 0.65rem;
+}
+.filter-toggle.open .arrow { transform: rotate(180deg); }
+
+.filter-panel {
+  background: var(--white);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--gray-200);
+}
+.filter-panel.open {
+  max-height: 400px;
+  padding: 12px 16px 14px;
+}
+.filter-group { margin-bottom: 10px; }
+.filter-group:last-child { margin-bottom: 0; }
+.filter-group-label {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.filter-chip {
+  padding: 5px 11px;
+  border-radius: 20px;
+  background: var(--gray-100);
+  color: var(--gray-500);
+  font-size: 0.78rem;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.15s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+.filter-chip:hover { background: var(--primary-light); color: var(--primary-dark); }
+.filter-chip.active {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary-dark);
+}
+.filter-chip .count {
+  display: inline-block;
+  min-width: 16px;
+  text-align: center;
+  font-size: 0.7rem;
+  opacity: 0.85;
+  margin-left: 2px;
+}
+
+/* ============================================================
+   卡片导航与计数器
+   ============================================================ */
+.card-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 16px 10px;
+}
+.card-counter {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  min-width: 90px;
+  text-align: center;
+}
+.nav-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-200);
+  background: var(--white);
+  color: var(--gray-500);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+.nav-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+.nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.shuffle-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--primary);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: 4px;
+}
+.shuffle-btn:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+/* ============================================================
+   卡片容器与翻转
+   ============================================================ */
+.card-stage {
+  perspective: 1200px;
+  padding: 0 16px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.card-body {
+  position: relative;
+  width: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.card-body.flipped {
+  transform: rotateY(180deg);
+}
+.card-face {
+  width: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.card-front {
+  position: relative;
+}
+.card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateY(180deg);
+}
+
+/* ============================================================
+   卡片正面
+   ============================================================ */
+.front-inner {
+  padding: 28px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 280px;
+  justify-content: center;
+}
+.process-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  box-shadow: 0 3px 10px rgba(10,186,181,0.35);
+}
+.front-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.tag-group, .tag-area {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+.process-name-cn {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+.process-name-en {
+  font-size: 0.88rem;
+  color: var(--gray-500);
+  margin-bottom: 18px;
+  font-style: italic;
+}
+.flip-hint {
+  font-size: 0.75rem;
+  color: var(--gray-300);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 状态标记 */
+.status-badges {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+.status-pill {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.status-pill.mastered { background: var(--green-bg); color: var(--green-fg); }
+.status-pill.review { background: var(--red-bg); color: var(--red-fg); }
+.status-pill.fav { background: #fff8e1; color: #f59e0b; }
+
+/* ============================================================
+   卡片背面
+   ============================================================ */
+.back-inner {
+  padding: 22px 20px 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.back-inner::-webkit-scrollbar {
+  width: 4px;
+}
+.back-inner::-webkit-scrollbar-track {
+  background: transparent;
+}
+.back-inner::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 2px;
+}
+.back-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  text-align: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--primary-light);
+}
+.itto-section {
+  margin-bottom: 14px;
+}
+.itto-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--gray-700);
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.itto-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.itto-chip {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-200);
+  line-height: 1.4;
+}
+.itto-chip.input-chip { background: #e8f4fd; border-color: #bbdefb; color: #1565c0; }
+.itto-chip.tool-chip { background: #fff3e0; border-color: #ffe0b2; color: #e65100; }
+.itto-chip.output-chip { background: #e8f5e9; border-color: #c8e6c9; color: #2e7d32; }
+
+.key-points {
+  background: var(--gold-bg);
+  border-left: 4px solid var(--gold-border);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 12px 14px;
+  margin-top: 14px;
+}
+.key-points-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #f59e0b;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.key-points-text {
+  font-size: 0.84rem;
+  color: var(--gray-700);
+  line-height: 1.65;
+}
+.mnemonic-section {
+  margin-top: 12px;
+  background: var(--primary-light);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  text-align: center;
+}
+.mnemonic-label {
+  font-size: 0.75rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.mnemonic-text {
+  font-size: 0.88rem;
+  color: var(--gray-900);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   底部操作栏
+   ============================================================ */
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--white);
+  border-top: 1px solid var(--gray-200);
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+}
+.action-btn {
+  flex: 1;
+  max-width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--gray-200);
+  background: var(--white);
+  color: var(--gray-500);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.action-btn .icon { font-size: 1.2rem; line-height: 1; }
+.action-btn:hover { border-color: var(--gray-300); }
+.action-btn.mastered-active {
+  border-color: var(--green-fg);
+  background: var(--green-bg);
+  color: var(--green-fg);
+}
+.action-btn.review-active {
+  border-color: var(--red-fg);
+  background: var(--red-bg);
+  color: var(--red-fg);
+}
+.action-btn.fav-active {
+  border-color: #f59e0b;
+  background: #fff8e1;
+  color: #f59e0b;
+}
+.action-btn.flip-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ============================================================
+   空状态
+   ============================================================ */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--gray-500);
+}
+.empty-state .icon { font-size: 2.8rem; margin-bottom: 12px; }
+.empty-state .msg { font-size: 0.95rem; line-height: 1.6; }
+
+/* ============================================================
+   键盘提示 (仅桌面显示)
+   ============================================================ */
+.kbd-hints {
+  display: none;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px;
+  flex-wrap: wrap;
+}
+.kbd-hint {
+  font-size: 0.7rem;
+  color: var(--gray-300);
+}
+.kbd-hint kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.7rem;
+  margin: 0 2px;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (min-width: 600px) {
+  .app-header { padding: 18px 32px; }
+  .app-header h1 { font-size: 1.8rem; }
+  .card-stage { padding: 0 24px; }
+  .front-inner { padding: 36px 32px 32px; min-height: 320px; }
+  .back-inner { padding: 28px 28px 24px; max-height: 75vh; }
+  .process-name-cn { font-size: 1.8rem; }
+  .kbd-hints { display: flex; }
+  .action-btn { max-width: 130px; padding: 10px 8px; font-size: 0.8rem; }
+  .action-btn .icon { font-size: 1.35rem; }
+}
+
+@media (min-width: 900px) {
+  body { max-width: 720px; margin: 0 auto; }
+  .app-header, .stats-bar, .mode-tabs, .filter-toggle, .filter-panel,
+  .progress-wrap, .action-bar {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .action-bar { left: 50%; transform: translateX(-50%); max-width: 720px; }
+}
+
+/* ============================================================
+   过渡动画
+   ============================================================ */
+.card-stage { transition: opacity 0.2s ease; }
+.card-stage.fading { opacity: 0; }
+
+/* ============================================================
+   工具详情 (toolsDetail)
+   ============================================================ */
+.tools-detail {
+  margin-top: 10px;
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 3px solid #ffe0b2;
+}
+.tools-detail-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e65100;
+  margin-bottom: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+}
+.tools-detail-title .arrow {
+  font-size: 0.6rem;
+  transition: transform 0.2s ease;
+}
+.tools-detail-title.open .arrow { transform: rotate(90deg); }
+.tools-detail-content {
+  display: none;
+  margin-bottom: 4px;
+}
+.tools-detail-content.open { display: block; }
+.tools-detail-item {
+  padding: 6px 0;
+  border-bottom: 1px dashed #e2e8e8;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+.tools-detail-item:last-child { border-bottom: none; }
+.tools-detail-item strong {
+  color: #e65100;
+  font-weight: 600;
+}
+
+/* ============================================================
+   公式区 (formulas)
+   ============================================================ */
+.formulas-section {
+  margin-top: 16px;
+  background: #fff8e1;
+  border-left: 4px solid #ffd54f;
+  border-radius: 0 8px 8px 0;
+  padding: 14px 14px 10px;
+}
+.formulas-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f57f17;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.formula-card {
+  background: rgba(255,255,255,0.7);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255,213,79,0.3);
+}
+.formula-card:last-child { margin-bottom: 0; }
+.formula-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #2d3a3a;
+  margin-bottom: 4px;
+}
+.formula-expr {
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #e65100;
+  padding: 4px 8px;
+  background: rgba(255,243,224,0.5);
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.formula-explain {
+  font-size: 0.76rem;
+  color: #6b7b7b;
+  line-height: 1.5;
+  margin-bottom: 3px;
+}
+.formula-example {
+  font-size: 0.74rem;
+  color: #5d4037;
+  background: rgba(255,248,225,0.6);
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   考试提示 (examTips)
+   ============================================================ */
+.exam-tips {
+  margin-top: 16px;
+  background: #fef2f2;
+  border-radius: 8px;
+  padding: 14px 14px 10px;
+  border: 1px solid #fecaca;
+}
+.exam-tips-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.exam-tip-item {
+  font-size: 0.78rem;
+  color: #2d3a3a;
+  line-height: 1.6;
+  padding: 4px 0 4px 16px;
+  position: relative;
+}
+.exam-tip-item::before {
+  content: '\25B8';
+  position: absolute;
+  left: 0;
+  color: #dc2626;
+  font-size: 0.7rem;
+  top: 6px;
+}
+.exam-tip-item + .exam-tip-item {
+  border-top: 1px solid #fee2e2;
+  padding-top: 6px;
+  margin-top: 2px;
+}
+
+/* ============================================================
+   过程链接 (processLinks)
+   ============================================================ */
+.process-links {
+  margin-top: 16px;
+  background: #eff6ff;
+  border-radius: 8px;
+  padding: 14px 14px 10px;
+  border: 1px solid #bfdbfe;
+}
+.process-links-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.process-link-group {
+  margin-bottom: 8px;
+}
+.process-link-group:last-child { margin-bottom: 0; }
+.process-link-group-title {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #6b7b7b;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.process-link-item {
+  font-size: 0.78rem;
+  color: #2d3a3a;
+  line-height: 1.55;
+  padding: 3px 0 3px 18px;
+  position: relative;
+}
+.process-link-item.from::before {
+  content: '\2190';
+  position: absolute;
+  left: 0;
+  color: #1565c0;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.process-link-item.to::before {
+  content: '\2192';
+  position: absolute;
+  left: 0;
+  color: #2e7d32;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.process-link-item .link-process {
+  font-weight: 600;
+  color: #1565c0;
+}
+.process-link-item .link-item {
+  color: #6b7b7b;
+  font-size: 0.74rem;
+}
+
+</style>
+</head>
+<body>
+
+<!-- 顶部头部 -->
+<header class="app-header">
+  <h1>PMBOK 知识卡片</h1>
+  <div class="subtitle">49个管理过程 · ITTO速记 · 考试要点 · 公式速查</div>
+</header>
+
+<!-- 统计栏 -->
+<div class="stats-bar" id="statsBar">
+  <div class="stat-item"><span class="stat-value" id="statTotal">49</span><span class="stat-label">总计</span></div>
+  <div class="stat-item"><span class="stat-value mastered" id="statMastered">0</span><span class="stat-label">已掌握</span></div>
+  <div class="stat-item"><span class="stat-value review" id="statReview">0</span><span class="stat-label">需复习</span></div>
+  <div class="stat-item"><span class="stat-value unlearned" id="statUnlearned">49</span><span class="stat-label">未学习</span></div>
+  <div class="stat-item"><span class="stat-value favorite" id="statFav">0</span><span class="stat-label">收藏</span></div>
+</div>
+<div class="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-text" id="progressText">掌握进度: 0%</div>
+</div>
+
+<!-- 模式标签 -->
+<div class="mode-tabs" id="modeTabs">
+  <div class="mode-tab active" data-mode="browse">浏览学习</div>
+  <div class="mode-tab" data-mode="random">随机测试</div>
+  <div class="mode-tab" data-mode="review">错题本</div>
+</div>
+
+<!-- 筛选区 -->
+<div class="filter-toggle" id="filterToggle">
+  <span>筛选条件</span>
+  <span class="arrow">▼</span>
+</div>
+<div class="filter-panel" id="filterPanel">
+  <div class="filter-group">
+    <div class="filter-group-label">过程组</div>
+    <div class="filter-chips" id="groupFilters"></div>
+  </div>
+  <div class="filter-group">
+    <div class="filter-group-label">知识领域</div>
+    <div class="filter-chips" id="areaFilters"></div>
+  </div>
+</div>
+
+<!-- 卡片导航 -->
+<div class="card-nav" id="cardNav">
+  <button class="nav-btn" id="prevBtn" title="上一张">◀</button>
+  <span class="card-counter" id="cardCounter">第 1 / 49 张</span>
+  <button class="nav-btn" id="nextBtn" title="下一张">▶</button>
+  <button class="shuffle-btn" id="shuffleBtn" style="display:none">🔀 重排</button>
+</div>
+
+<!-- 键盘快捷键提示 -->
+<div class="kbd-hints">
+  <span class="kbd-hint"><kbd>←</kbd><kbd>→</kbd> 切换</span>
+  <span class="kbd-hint"><kbd>Space</kbd> 翻转</span>
+  <span class="kbd-hint"><kbd>1</kbd> 掌握</span>
+  <span class="kbd-hint"><kbd>2</kbd> 复习</span>
+  <span class="kbd-hint"><kbd>3</kbd> 收藏</span>
+</div>
+
+<!-- 卡片 -->
+<div class="card-stage" id="cardStage"></div>
+
+<!-- 底部操作栏 -->
+<div class="action-bar" id="actionBar">
+  <button class="action-btn" id="btnMastered"><span class="icon">✓</span><span>已掌握</span></button>
+  <button class="action-btn flip-btn" id="btnFlip"><span class="icon">↻</span><span>翻转</span></button>
+  <button class="action-btn" id="btnFav"><span class="icon">☆</span><span>收藏</span></button>
+  <button class="action-btn" id="btnReview"><span class="icon">!</span><span>需复习</span></button>
+</div>
+
+<script>
+/* ============================================================
+   PMBOK 数据 (49 个过程)
+   ============================================================ */
+const PMBOK_DATA = [{"id":"4.1","name":"制定项目章程","nameEn":"Develop Project Charter","processGroup":"initiating","processGroupCn":"启动过程组","knowledgeArea":"integration","knowledgeAreaCn":"项目整合管理","itto":{"inputs":["商业文件","协议","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","人际关系与团队技能","会议"],"outputs":["项目章程","假设日志"]},"keyPoints":"项目章程由项目发起人签发，正式授权项目经理动用组织资源。它是项目存在的基础文件，标志着项目正式启动。商业论证和效益管理计划属于商业文件，是制定章程的重要输入。","mnemonic":"商协事组入，专数人会出，章程假设来","toolsDetail":{"数据收集":"头脑风暴（创意方案）、焦点小组（预选相关方讨论）、访谈（一对一深入了解）","人际关系与团队技能":"冲突管理、引导（促进共识）、会议管理"},"examTips":["项目章程由发起人（sponsor）签发，不是项目经理签发——这是高频陷阱题","项目经理参与编写章程但不能批准章程，批准后由发起人授权项目经理","商业论证（business case）和效益管理计划是商业文件的组成部分，属于输入而非输出","项目章程只批准项目存在，不批准项目管理计划"],"processLinks":{"outputsTo":[{"to":"4.2 制定项目管理计划","item":"项目章程"},{"to":"13.1 识别相关方","item":"项目章程"},{"to":"4.7 结束项目或阶段","item":"项目章程"}]}},{"id":"4.2","name":"制定项目管理计划","nameEn":"Develop Project Management Plan","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"integration","knowledgeAreaCn":"项目整合管理","itto":{"inputs":["项目章程","其他过程的输出","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","人际关系与团队技能","会议"],"outputs":["项目管理计划"]},"keyPoints":"项目管理计划是整合所有子计划和基准的总纲文件，包含范围/进度/成本三大基准和十个知识领域的子管理计划。项目管理计划一旦批准，变更必须走整体变更控制流程。","mnemonic":"章他事组入，专数人会出，一个总计划","examTips":["项目管理计划 ≠ 项目文件：项目管理计划包含子计划和基准，项目文件是辅助文件","三大基准：范围基准、进度基准、成本基准——是项目管理计划的组成部分","批准的基准变更必须通过4.6实施整体变更控制流程","项目管理计划是渐进明细的，随项目推进不断完善"]},{"id":"4.3","name":"指导与管理项目工作","nameEn":"Direct and Manage Project Work","processGroup":"executing","processGroupCn":"执行过程组","knowledgeArea":"integration","knowledgeAreaCn":"项目整合管理","itto":{"inputs":["项目管理计划","项目文件","批准的变更请求","事业环境因素","组织过程资产"],"tools":["专家判断","项目管理信息系统","会议"],"outputs":["可交付成果","工作绩效数据","问题日志","变更请求","项目管理计划更新","项目文件更新","组织过程资产更新"]},"keyPoints":"这是执行过程组的核心过程，将计划转化为可交付成果和工作绩效数据。批准的变更请求是本过程的独特输入，体现变更落地执行。","mnemonic":"管文批事组，专系会出力，成果数据变更记","examTips":["工作绩效数据是原始数据和观察结果（最底层），区别于工作绩效信息（分析后）和工作绩效报告（综合后）","批准的变更请求是本过程独特输入——体现变更在执行层落地实施","本过程同时产生变更请求——执行中发现问题也会提出变更","可交付成果在本过程产生，后续进入8.3控制质量进行检验"],"processLinks":{"outputsTo":[{"to":"8.3 控制质量","item":"可交付成果"},{"to":"各监控过程","item":"工作绩效数据"}]}},{"id":"4.4","name":"管理项目知识","nameEn":"Manage Project Knowledge","processGroup":"executing","processGroupCn":"执行过程组","knowledgeArea":"integration","knowledgeAreaCn":"项目整合管理","itto":{"inputs":["项目管理计划","项目文件","可交付成果","事业环境因素","组织过程资产"],"tools":["专家判断","知识管理","信息管理","人际关系与团队技能"],"outputs":["经验教训登记册","项目管理计划更新","组织过程资产更新"]},"keyPoints":"PMBOK第6版新增过程，关注显性知识（文档化）和隐性知识（经验、直觉）的管理。经验教训登记册是本过程的关键输出，需贯穿项目全生命周期持续更新。","mnemonic":"管文交事组，专人知关出，教训登记组更新","toolsDetail":{"知识管理":"人际网络、实践社区、会议、工作跟随（shadowing）、创意工作坊","信息管理":"经验教训登记册、知识库、图书馆服务、信息检索"},"examTips":["这是PMBOK第6版新增过程，软考高频考点","显性知识（Explicit）= 文字、数字、图片编撰；隐性知识（Tacit）= 经验、直觉、诀窍","经验教训登记册在项目全生命周期中持续更新，最终归入组织过程资产","知识管理的障碍：缺乏信任、缺乏激励、地理分散"]},{"id":"4.5","name":"监控项目工作","nameEn":"Monitor and Control Project Work","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"integration","knowledgeAreaCn":"项目整合管理","itto":{"inputs":["项目管理计划","项目文件","工作绩效信息","协议","事业环境因素","组织过程资产"],"tools":["专家判断","数据分析","决策","会议"],"outputs":["工作绩效报告","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"将工作绩效信息（来自各监控过程的分析结果）转化为工作绩效报告（综合性报告文件），用于沟通和决策。是整体层面的监控，不是某个具体知识领域的监控。","mnemonic":"管文信协事组，专分数议出，报告变更更新记","toolsDetail":{"数据分析":"挣值分析、偏差分析、趋势分析、根本原因分析、备选方案分析、成本效益分析"},"examTips":["工作绩效信息（来自各知识领域监控）→ 本过程 → 工作绩效报告（综合性文件）","工作绩效数据（执行产生）→ 各监控过程（分析）→ 工作绩效信息 → 本过程 → 工作绩效报告","这是整体层面的监控，区别于各知识领域的具体监控过程","协议是本过程独特输入——用于监控外部供应商的绩效"]},{"id":"4.6","name":"实施整体变更控制","nameEn":"Perform Integrated Change Control","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"integration","knowledgeAreaCn":"项目整合管理","itto":{"inputs":["项目管理计划","项目文件","工作绩效报告","变更请求","事业环境因素","组织过程资产"],"tools":["专家判断","变更控制工具","数据分析","决策","会议"],"outputs":["批准的变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"审查所有变更请求，批准或否决变更，协调对项目管理计划、项目文件和可交付成果的变更。变更控制委员会（CCB）负责审批，项目经理可批准不影响基准的变更。所有变更必须书面记录。","mnemonic":"管文报变事组，专变分决议，批准变更更新记","examTips":["CCB（变更控制委员会）审批影响基准的变更，项目经理可批准不影响基准的变更","所有变更必须书面记录——口头变更不算变更","即使紧急变更也需要事后补走变更流程","否决的变更也需要记录原因，不能简单忽略","批准的变更请求输出到4.3指导与管理项目工作执行"],"processLinks":{"inputsFrom":[{"from":"各执行和监控过程","item":"变更请求"}],"outputsTo":[{"to":"4.3 指导与管理项目工作","item":"批准的变更请求"}]}},{"id":"4.7","name":"结束项目或阶段","nameEn":"Close Project or Phase","processGroup":"closing","processGroupCn":"收尾过程组","knowledgeArea":"integration","knowledgeAreaCn":"项目整合管理","itto":{"inputs":["项目章程","项目管理计划","项目文件","验收的可交付成果","商业文件","协议","采购文档","组织过程资产"],"tools":["专家判断","数据分析","会议"],"outputs":["项目文件更新","最终产品、服务或成果移交","最终报告","组织过程资产更新"]},"keyPoints":"收尾阶段需完成验收的可交付成果移交、最终报告编写、经验教训总结、释放资源等工作。验收的可交付成果来自控制质量过程的输出。收尾过程不需要变更请求。","mnemonic":"章管文验商协采组，专数议出力，移交终报更新组","examTips":["收尾过程不产生变更请求——项目已接近完成，不再接受新变更","验收的可交付成果来自确认范围（5.5）的输出，不是直接来自控制质量","收尾工作包括：移交成果、编写最终报告、总结经验教训、释放资源、关闭采购","经验教训最终归入组织过程资产，供未来项目参考"],"processLinks":{"inputsFrom":[{"from":"5.5 确认范围","item":"验收的可交付成果"}]}},{"id":"5.1","name":"规划范围管理","nameEn":"Plan Scope Management","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"scope","knowledgeAreaCn":"项目范围管理","itto":{"inputs":["项目章程","项目管理计划","事业环境因素","组织过程资产"],"tools":["专家判断","数据分析","会议"],"outputs":["范围管理计划","需求管理计划"]},"keyPoints":"产出两个计划：范围管理计划（如何定义、确认和控制范围）和需求管理计划（如何收集、分析和管理需求）。是范围管理其他过程的指导文件。","mnemonic":"章管事组入，专数会议出，范围需求两计划","examTips":["范围管理计划：如何定义、确认和控制范围","需求管理计划：如何收集、分析和管理需求","两个计划都是项目管理计划的子计划，不独立存在","本过程不产生范围基准或需求文件——那些是后续过程的输出"]},{"id":"5.2","name":"收集需求","nameEn":"Collect Requirements","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"scope","knowledgeAreaCn":"项目范围管理","itto":{"inputs":["项目章程","项目管理计划","项目文件","商业文件","协议","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","数据分析","决策","数据表现","人际关系与团队技能","系统交互图","原型法"],"outputs":["需求文件","需求跟踪矩阵"]},"keyPoints":"收集需求的工具最多，包括访谈、焦点小组、引导式研讨会、问卷调查、标杆对照、头脑风暴、名义小组、德尔菲技术等。需求跟踪矩阵将需求与来源和目标链接，确保每个需求都有商业价值。","mnemonic":"章管文商协事组，专收分数决表关系原，需求文件跟踪矩阵","toolsDetail":{"数据收集":"访谈、焦点小组、引导式研讨会（QFD）、问卷调查、标杆对照、头脑风暴","决策":"投票（一致同意/多数同意/相对多数）、独裁型、多标准决策分析","数据表现":"亲和图、思维导图"},"examTips":["收集需求的工具数量在49个过程中最多——考试常考工具分类","德尔菲技术：匿名、背靠背、多轮反馈，避免群体思维","名义小组：先独立思考再投票排序，区别于头脑风暴","引导式研讨会（JAD）：跨职能相关方集中讨论，加速达成共识","需求跟踪矩阵：将需求与商业目标和项目目标关联，确保每个需求可追溯"]},{"id":"5.3","name":"定义范围","nameEn":"Define Scope","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"scope","knowledgeAreaCn":"项目范围管理","itto":{"inputs":["项目章程","项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","数据分析","决策","人际关系与团队技能","产品分析"],"outputs":["项目范围说明书","项目文件更新"]},"keyPoints":"输出项目范围说明书，详细描述项目可交付成果及验收标准、项目除外责任。产品分析技术包括产品分解、系统分析、需求分析、系统交互图等。","mnemonic":"章管文事组，专数决关产出，范围说明书更新文件","toolsDetail":{"产品分析":"产品分解、系统分析、需求分析、系统工程、价值工程"},"examTips":["项目范围说明书包含：产品范围描述、验收标准、可交付成果、项目除外责任","项目除外责任（Exclusions）是定义范围的重要内容——明确说明什么不在项目范围内","范围说明书是范围基准的组成部分之一（范围说明书+WBS+WBS词典）","产品分析是将高层级产品描述转化为具体的可交付成果"]},{"id":"5.4","name":"创建WBS","nameEn":"Create WBS","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"scope","knowledgeAreaCn":"项目范围管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","分解"],"outputs":["范围基准","项目文件更新"]},"keyPoints":"通过分解技术将可交付成果分解为工作包（WBS的最底层）。范围基准 = 项目范围说明书 + WBS + WBS词典。工作包是估算成本和进度的基础，100%原则要求WBS包含全部范围。","mnemonic":"管文事组入，专家分解出，范围基准更新文","examTips":["范围基准 = 项目范围说明书 + WBS + WBS词典（三者缺一不可）","100%规则：WBS必须包含100%的项目范围，不多不少","工作包是WBS最底层，是估算成本和进度的最小单元","WBS词典是对WBS每个元素的详细说明（工作内容、负责人、成本、验收标准等）","控制账户是WBS中用于管理控制的节点，可高于或等于工作包"],"processLinks":{"outputsTo":[{"to":"6.2 定义活动","item":"范围基准（工作包作为分解基础）"},{"to":"7.2 估算成本","item":"范围基准"},{"to":"12.1 规划采购管理","item":"范围基准"}]}},{"id":"5.5","name":"确认范围","nameEn":"Validate Scope","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"scope","knowledgeAreaCn":"项目范围管理","itto":{"inputs":["项目管理计划","项目文件","核实的可交付成果","工作绩效数据"],"tools":["检查","决策"],"outputs":["验收的可交付成果","工作绩效信息","变更请求","项目文件更新"]},"keyPoints":"确认范围是客户/发起人正式验收已完成的可交付成果的过程。核实的可交付成果来自控制质量（内部验证），验收的可交付成果是确认范围的输出（外部验收）。未通过验收的会产生变更请求。","mnemonic":"管文核绩入，检查决策出，验收成果变更记","examTips":["确认范围（客户验收）vs 控制质量（内部检查）——高频对比考点","顺序：先控制质量（8.3）→ 后确认范围（5.5），不可颠倒","核实的可交付成果 = 控制质量的输出（内部验证通过）","验收的可交付成果 = 确认范围的输出（客户验收通过）","未验收通过的可交付成果会产生变更请求，进入整体变更控制"],"processLinks":{"inputsFrom":[{"from":"8.3 控制质量","item":"核实的可交付成果"}],"outputsTo":[{"to":"4.7 结束项目或阶段","item":"验收的可交付成果"}]}},{"id":"5.6","name":"控制范围","nameEn":"Control Scope","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"scope","knowledgeAreaCn":"项目范围管理","itto":{"inputs":["项目管理计划","项目文件","工作绩效数据","组织过程资产"],"tools":["数据分析"],"outputs":["工作绩效信息","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"监控范围状态，管理范围基准变更，防止范围蔓延（gold plating和scope creep）。数据分析包括偏差分析和趋势分析。范围变更必须通过整体变更控制流程。","mnemonic":"管文绩组入，数据分析出，绩效变更更新记","examTips":["范围蔓延（Scope Creep）= 未经控制的变更累积","镀金（Gold Plating）= 主动做超出范围的额外工作——项目经理应制止","范围变更必须通过4.6实施整体变更控制，不能擅自变更","偏差分析：比较实际范围与基准范围的差异"]},{"id":"6.1","name":"规划进度管理","nameEn":"Plan Schedule Management","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"schedule","knowledgeAreaCn":"项目进度管理","itto":{"inputs":["项目章程","项目管理计划","事业环境因素","组织过程资产"],"tools":["专家判断","数据分析","会议"],"outputs":["进度管理计划"]},"keyPoints":"进度管理计划确定进度编制方法论、工具、进度模型格式和更新频率。进度模型的编制方法包括敏捷、预测型和混合型。","mnemonic":"章管事组入，专数会议出，一个进度管理计划","examTips":["进度管理计划确定方法论和格式，不包含具体进度数据","进度模型的编制方法：预测型（瀑布）、敏捷型、混合型","进度管理计划是项目管理计划的子计划"]},{"id":"6.2","name":"定义活动","nameEn":"Define Activities","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"schedule","knowledgeAreaCn":"项目进度管理","itto":{"inputs":["项目管理计划","事业环境因素","组织过程资产"],"tools":["专家判断","分解","滚动式规划","会议"],"outputs":["活动清单","活动属性","里程碑清单","变更请求","项目管理计划更新"]},"keyPoints":"将WBS中的工作包分解为进度活动。里程碑清单标识项目中的重要时点，里程碑持续时间为零。滚动式规划适用于远期工作包暂不分解的情况。","mnemonic":"管事组入，专分会出，活动属性里程碑","examTips":["里程碑持续时间为零——只标识时点，不代表工作","滚动式规划：近期工作详细分解，远期工作暂不分解（渐进明细）","活动是进度管理的最小单元，工作包是范围管理的最小单元","定义活动是对工作包的进一步分解"]},{"id":"6.3","name":"排列活动顺序","nameEn":"Sequence Activities","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"schedule","knowledgeAreaCn":"项目进度管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["紧前关系绘图法","确定和整合依赖关系","提前量与滞后量","项目管理信息系统"],"outputs":["项目进度网络图","项目文件更新"]},"keyPoints":"紧前关系绘图法（PDM）创建进度网络图，四种逻辑关系：FS（完成-开始）、FF、SS、SF。强制性依赖（硬逻辑）与选择性依赖（软逻辑/优先逻辑）需区分。提前量为负值，滞后量为正值。","mnemonic":"管文事组入，紧提确系出，网络图更新文","toolsDetail":{"确定和整合依赖关系":"强制性依赖（硬逻辑，合同或工作性质要求）vs 选择性依赖（软逻辑/优先逻辑）；内部依赖 vs 外部依赖","提前量与滞后量":"提前量（Lead）= 允许后继活动提前开始，为负值；滞后量（Lag）= 必须等待的时间，为正值"},"examTips":["PDM四种关系：FS（最常用）、FF、SS、SF（最少用）","强制性依赖 = 硬逻辑（工作性质决定）；选择性依赖 = 软逻辑（最佳实践）","提前量 = 负值（后继活动可提前开始）；滞后量 = 正值（必须等待的时间）","考试常考提前量和滞后量的计算——注意正负号"]},{"id":"6.4","name":"估算活动持续时间","nameEn":"Estimate Activity Durations","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"schedule","knowledgeAreaCn":"项目进度管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","类比估算","参数估算","三点估算","自下而上估算","数据分析","决策","会议"],"outputs":["持续时间估算","估算依据","项目文件更新"]},"keyPoints":"三点估算公式：三角分布 tE=(tO+tM+tP)/3；Beta分布（PERT）tE=(tO+4tM+tP)/6。类比估算（自上而下）精度低速度快；参数估算利用历史数据和统计关系；自下而上估算精度高成本高。","mnemonic":"管文事组入，专类参三底分决议出，持续估算依据来","formulas":[{"name":"PERT期望值（Beta分布）","formula":"tE = (tO + 4tM + tP) / 6","explain":"tO=乐观估计，tM=最可能估计，tP=悲观估计；PERT赋予最可能值4倍权重","example":"tO=3天, tM=5天, tP=10天 → tE=(3+4×5+10)/6 = 33/6 = 5.5天"},{"name":"PERT标准差","formula":"σ = (tP - tO) / 6","explain":"标准差反映估算的不确定性程度，σ越大不确定性越大","example":"tO=3天, tP=10天 → σ=(10-3)/6 = 1.17天"},{"name":"PERT方差","formula":"V = σ² = [(tP - tO) / 6]²","explain":"方差可累加，用于计算项目整体完工概率","example":"σ=1.17天 → V=1.37天²"},{"name":"三角分布","formula":"tE = (tO + tM + tP) / 3","explain":"三个估计值等权重平均，适用于不确定性较大时","example":"tO=3天, tM=5天, tP=10天 → tE=(3+5+10)/3 = 6天"}],"examTips":["PERT公式（Beta分布）考频极高：tE=(tO+4tM+tP)/6，注意是最可能值×4","三角分布 vs Beta分布：三角分布等权平均，Beta分布赋予最可能值更高权重","类比估算：精度低、成本低、速度快（用历史项目类比）","自下而上估算：精度高、成本高、速度慢（逐个工作包估算再汇总）","参数估算：用历史数据建立统计模型（如每平方米3天×100平方米=300天）"]},{"id":"6.5","name":"制定进度计划","nameEn":"Develop Schedule","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"schedule","knowledgeAreaCn":"项目进度管理","itto":{"inputs":["项目管理计划","项目文件","协议","事业环境因素","组织过程资产"],"tools":["进度网络分析","关键路径法","资源优化","数据分析","提前量与滞后量","进度压缩","项目管理信息系统","敏捷或适应型方法"],"outputs":["进度基准","项目进度计划","进度数据","项目日历","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"关键路径法（CPM）确定项目最短工期，关键路径上活动总浮动时间为零。进度压缩两种方法：赶工（增加资源，增加成本）和快速跟进（并行执行，增加风险）。资源优化包括资源平衡和资源平滑。","mnemonic":"管文协事组入，网关资分提压系敏出，基准计划数据日历","toolsDetail":{"关键路径法":"正推法（ES/EF，从前往后）和逆推法（LS/LF，从后往前）；总浮动=LS-ES=LF-EF；关键路径上总浮动=0","进度压缩":"赶工（Crashing）= 增加资源缩短工期，增加成本但不增加风险；快速跟进（Fast Tracking）= 并行执行，不增加成本但增加风险","资源优化":"资源平衡（Leveling）= 可能改变关键路径；资源平滑（Smoothing）= 不改变关键路径"},"formulas":[{"name":"总浮动时间","formula":"TF = LS - ES = LF - EF","explain":"总浮动=活动可延迟而不影响项目总工期的时间；关键路径上TF=0","example":"LS=第10天, ES=第8天 → TF=2天（可延迟2天不影响总工期）"},{"name":"自由浮动时间","formula":"FF = 后继活动最早ES - 本活动EF","explain":"自由浮动=活动可延迟而不影响任何后继活动最早开始的时间","example":"本活动EF=第8天, 后继活动最早ES=第10天 → FF=2天"},{"name":"正推法","formula":"EF = ES + 持续时间；ES = max(前驱活动EF)","explain":"从项目开始向后推算最早开始/完成时间","example":"活动A(EF=5)→活动B(持续3天) → B的ES=5, EF=5+3=8"}],"examTips":["关键路径 = 项目中最长的路径 = 决定项目最短工期","赶工增加成本（加人/加班），快速跟进增加风险（并行执行）——必考对比","赶工优先压缩关键路径上成本斜率最小的活动","资源平衡可能改变关键路径（延长项目工期）；资源平滑不改变关键路径","总浮动=LS-ES；自由浮动=不影响后继活动最早开始的延迟时间"]},{"id":"6.6","name":"控制进度","nameEn":"Control Schedule","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"schedule","knowledgeAreaCn":"项目进度管理","itto":{"inputs":["项目管理计划","项目文件","工作绩效数据","组织过程资产"],"tools":["数据分析","关键路径法","项目管理信息系统","资源优化","提前量与滞后量","进度压缩"],"outputs":["工作绩效信息","进度预测","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"使用进度偏差（SV=EV-PV）和进度绩效指数（SPI=EV/PV）评估进度绩效。SV<0或SPI<1表示进度落后。关键路径法持续监控以确保项目按期完成。","mnemonic":"管文绩组入，分关系资提压出，绩效预测变更记","formulas":[{"name":"进度偏差 SV","formula":"SV = EV - PV","explain":"SV>0进度超前，SV<0进度落后，SV=0按计划进行","example":"EV=100万, PV=120万 → SV=-20万，进度落后20万"},{"name":"进度绩效指数 SPI","formula":"SPI = EV / PV","explain":"SPI>1进度超前，SPI<1进度落后，SPI=1按计划进行","example":"EV=100万, PV=120万 → SPI=0.83，进度效率83%"}],"examTips":["SV<0 或 SPI<1 → 进度落后（记住：EV是被减数/被除数）","进度预测输出包含进度偏差和进度绩效指数","控制进度同时使用关键路径法和进度压缩技术","控制进度是监控过程组的过程，不是执行过程组"]},{"id":"7.1","name":"规划成本管理","nameEn":"Plan Cost Management","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"cost","knowledgeAreaCn":"项目成本管理","itto":{"inputs":["项目章程","项目管理计划","事业环境因素","组织过程资产"],"tools":["专家判断","数据分析","会议"],"outputs":["成本管理计划"]},"keyPoints":"成本管理计划确定计量单位、精确度、组织程序链接、控制临界值、绩效测量规则和报告格式。挣值管理的三个基本值（PV、EV、AC）在此阶段确定规则。","mnemonic":"章管事组入，专数会议出，一个成本管理计划","examTips":["成本管理计划确定EVM的规则，包括计量单位、精确度、控制临界值","控制临界值：偏差超过多少需要采取行动（如±10%）","成本管理计划不规定具体成本数额，只规定管理方法和规则"]},{"id":"7.2","name":"估算成本","nameEn":"Estimate Costs","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"cost","knowledgeAreaCn":"项目成本管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","类比估算","参数估算","自下而上估算","三点估算","数据分析","项目管理信息系统","决策"],"outputs":["成本估算","估算依据","项目文件更新"]},"keyPoints":"成本估算方法与持续时间估算类似，但关注资源成本。学习曲线理论：重复性工作成本逐步降低。质量成本（COQ）包括一致性成本（预防+评估）和非一致性成本（内部失败+外部失败）。","mnemonic":"管文事组入，专类参底三分系决出，成本估算依据来","examTips":["质量成本（COQ）必考：一致性成本=预防成本+评估成本；非一致性成本=内部失败+外部失败","预防成本（培训、文档化流程）优于评估成本（检查、测试），更优于失败成本","学习曲线：重复性工作每翻倍，单位成本按固定百分比下降","应急储备包含在成本基准中，管理储备不包含在成本基准中"]},{"id":"7.3","name":"制定预算","nameEn":"Determine Budget","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"cost","knowledgeAreaCn":"项目成本管理","itto":{"inputs":["项目管理计划","项目文件","商业文件","协议","事业环境因素","组织过程资产"],"tools":["专家判断","成本汇总","数据分析","历史信息审核","资金限制平衡","融资"],"outputs":["成本基准","项目资金需求","项目文件更新"]},"keyPoints":"成本基准 = 各活动成本估算 + 应急储备（项目经理管理）+ 管理储备（高级管理层管理）。项目预算 = 成本基准 + 管理储备。应急储备应对已知-未知风险，管理储备应对未知-未知风险。","mnemonic":"管文商协事组入，专汇分历资融出，成本基准资金需求","formulas":[{"name":"成本基准构成","formula":"成本基准 = 活动成本估算 + 应急储备","explain":"应急储备包含在成本基准中，由项目经理管理","example":"活动成本500万 + 应急储备50万 = 成本基准550万"},{"name":"项目预算构成","formula":"项目预算 = 成本基准 + 管理储备","explain":"管理储备不在成本基准中，由高级管理层管理","example":"成本基准550万 + 管理储备30万 = 项目预算580万"}],"examTips":["应急储备应对已知-未知风险（Known Unknowns），项目经理可动用","管理储备应对未知-未知风险（Unknown Unknowns），需管理层批准","成本基准包含应急储备但不包含管理储备——必考公式","BAC（完工预算）= 成本基准 - 管理储备 = 活动成本+应急储备","项目预算 = 成本基准 + 管理储备"]},{"id":"7.4","name":"控制成本","nameEn":"Control Costs","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"cost","knowledgeAreaCn":"项目成本管理","itto":{"inputs":["项目管理计划","项目文件","项目资金需求","工作绩效数据","组织过程资产"],"tools":["专家判断","数据分析","完工尚需绩效指数","项目管理信息系统"],"outputs":["工作绩效信息","成本预测","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"挣值分析核心公式：CV=EV-AC（成本偏差）；CPI=EV/AC（成本绩效指数）；EAC=BAC/CPI（完工估算）；ETC=EAC-AC（完工尚需估算）；VAC=BAC-EAC（完工偏差）。TCPI用于计算剩余工作的成本绩效要求。","mnemonic":"管文资绩组入，专数完系出，绩效预测变更记","toolsDetail":{"数据分析":"挣值分析（EVM）、偏差分析、趋势分析、储备分析（剩余应急储备是否充足）"},"formulas":[{"name":"成本偏差 CV","formula":"CV = EV - AC","explain":"CV>0成本节约，CV<0成本超支，CV=0按预算执行","example":"EV=100万, AC=120万 → CV=-20万，超支20万"},{"name":"进度偏差 SV","formula":"SV = EV - PV","explain":"SV>0进度超前，SV<0进度落后，SV=0按计划进行","example":"EV=100万, PV=120万 → SV=-20万，进度落后20万"},{"name":"成本绩效指数 CPI","formula":"CPI = EV / AC","explain":"CPI>1成本节约，CPI<1成本超支","example":"EV=100万, AC=120万 → CPI=0.83，每花1元只获得0.83元价值"},{"name":"进度绩效指数 SPI","formula":"SPI = EV / PV","explain":"SPI>1进度超前，SPI<1进度落后","example":"EV=100万, PV=120万 → SPI=0.83"},{"name":"完工估算 EAC（典型偏差）","formula":"EAC = BAC / CPI","explain":"假设当前CPI能维持到项目结束，是最常用的EAC公式","example":"BAC=500万, CPI=0.83 → EAC=602万（预计总花费602万）"},{"name":"完工估算 EAC（非典型偏差）","formula":"EAC = AC + (BAC - EV)","explain":"假设剩余工作按原预算执行（当前偏差是一次性的）","example":"AC=120万, BAC=500万, EV=100万 → EAC=120+400=520万"},{"name":"完工估算 EAC（综合考虑）","formula":"EAC = AC + (BAC - EV) / (CPI × SPI)","explain":"同时考虑成本绩效和进度绩效对剩余工作的影响","example":"AC=120万, BAC-EV=400万, CPI=0.83, SPI=0.9 → EAC=120+400/(0.83×0.9)=655万"},{"name":"完工尚需估算 ETC","formula":"ETC = EAC - AC","explain":"完成剩余工作还需要花多少钱","example":"EAC=602万, AC=120万 → ETC=482万"},{"name":"完工偏差 VAC","formula":"VAC = BAC - EAC","explain":"VAC<0预计超支，VAC>0预计节约","example":"BAC=500万, EAC=602万 → VAC=-102万（预计超支102万）"},{"name":"完工尚需绩效指数 TCPI（基于BAC）","formula":"TCPI = (BAC - EV) / (BAC - AC)","explain":"要在原预算内完工，剩余工作需达到的成本绩效","example":"BAC=500万, EV=100万, AC=120万 → TCPI=400/380=1.05（需达到1.05才能不超支）"},{"name":"完工尚需绩效指数 TCPI（基于EAC）","formula":"TCPI = (BAC - EV) / (EAC - AC)","explain":"要在新估算内完工，剩余工作需达到的成本绩效","example":"BAC=500万, EV=100万, EAC=602万, AC=120万 → TCPI=400/482=0.83"}],"examTips":["EVM所有公式是考试必考内容，务必熟练掌握计算","记忆技巧：EV永远是被减数/被除数（挣值最重要）","CPI<1 表示超支（花的多挣的少）；SPI<1 表示落后（挣的比计划少）","EAC=BAC/CPI 适用于典型偏差（持续性）；EAC=AC+(BAC-EV) 适用于非典型偏差（一次性）","TCPI>1 表示剩余工作需要比之前更高的效率才能达标","TCPI基于BAC：目标不超原预算；TCPI基于EAC：目标不超新估算"]},{"id":"8.1","name":"规划质量管理","nameEn":"Plan Quality Management","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"quality","knowledgeAreaCn":"项目质量管理","itto":{"inputs":["项目章程","项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","数据分析","决策","数据表现","测试与检查的规划","会议"],"outputs":["质量管理计划","质量测量指标","项目管理计划更新","项目文件更新"]},"keyPoints":"质量成本包括一致性成本（预防成本、评估成本）和非一致性成本（内部失败成本、外部失败成本）。七种基本质量工具：因果图、流程图、核查表、直方图、帕累托图、控制图、散点图。","mnemonic":"章管文事组入，专收分数决表测议出，质量计划测量指标","toolsDetail":{"数据收集":"头脑风暴、核查表、焦点小组、访谈","数据表现":"流程图、逻辑模型、矩阵图"},"examTips":["七种基本质量工具必记：因果图（鱼骨图）、流程图、核查表、直方图、帕累托图、控制图、散点图","帕累托图（80/20法则）：识别导致最多缺陷的少数关键原因","控制图：上下控制限（±3σ），7点规则（连续7点在均值一侧=失控）","质量成本：预防成本最划算 > 评估成本 > 内部失败成本 > 外部失败成本（最贵）","质量测量指标是质量管理的量化标准，如缺陷率、可用性"]},{"id":"8.2","name":"管理质量","nameEn":"Manage Quality","processGroup":"executing","processGroupCn":"执行过程组","knowledgeArea":"quality","knowledgeAreaCn":"项目质量管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["数据收集","数据分析","决策","数据表现","审计","面向X的设计","问题解决","质量改进方法"],"outputs":["质量报告","测试与评估文件","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"管理质量（原质量保证）关注过程质量，通过审计和改进方法确保使用恰当的质量标准和程序。面向X的设计（DfX）关注产品特定方面的优化。质量审计是结构化的独立审查。","mnemonic":"管文事组入，收分数决表审设解进出，质量报告测试文件","toolsDetail":{"审计":"质量审计是结构化的独立审查，识别良好和不良实践，可提前安排或随机进行","面向X的设计":"DfX（Design for X）：X可以是可靠性、可维护性、可用性、成本等","质量改进方法":"PDCA（计划-执行-检查-行动）、六西格玛（DMAIC）"},"examTips":["管理质量（原质量保证）= 关注过程正确性；控制质量 = 关注结果正确性","管理质量属于执行过程组；控制质量属于监控过程组","质量审计可由内部审计团队或外部审计师进行","面向X的设计中的X：可靠性、可装配性、可测试性、可维护性等"]},{"id":"8.3","name":"控制质量","nameEn":"Control Quality","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"quality","knowledgeAreaCn":"项目质量管理","itto":{"inputs":["项目管理计划","项目文件","批准的变更请求","可交付成果","工作绩效数据","事业环境因素","组织过程资产"],"tools":["数据收集","数据分析","检查","测试/产品评估","数据表现","会议"],"outputs":["核实的可交付成果","工作绩效信息","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"控制质量关注可交付成果的正确性，通过检查和测试产生核实的可交付成果（输出到确认范围进行客户验收）。批准的变更请求也需要在本过程中进行验证。核实的可交付成果→确认范围→验收的可交付成果。","mnemonic":"管文批交绩事组，收分检测表议出，核实成果绩效信息","toolsDetail":{"数据表现":"因果图、控制图、直方图、散点图（七种质量工具在此过程使用）"},"examTips":["控制质量的输出 = 核实的可交付成果 → 流向确认范围（5.5）","批准的变更请求是控制质量的输入——验证变更是否正确实施","控制质量 = 内部检查（QC）；确认范围 = 外部验收（客户验收）","先控制质量（内部验证），后确认范围（客户验收），顺序不能颠倒"],"processLinks":{"inputsFrom":[{"from":"4.3 指导与管理项目工作","item":"可交付成果"}],"outputsTo":[{"to":"5.5 确认范围","item":"核实的可交付成果"}]}},{"id":"9.1","name":"规划资源管理","nameEn":"Plan Resource Management","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"resource","knowledgeAreaCn":"项目资源管理","itto":{"inputs":["项目章程","项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","数据表现","组织理论","会议"],"outputs":["资源管理计划","团队章程","项目管理计划更新","项目文件更新"]},"keyPoints":"资源管理计划包括资源识别与获取、角色与职责、项目组织图、培训策略等。团队章程定义团队价值观、沟通指南、决策标准、冲突处理流程和行为准则。组织理论关注层级结构和人员行为。","mnemonic":"章管文事组入，专表组议出，资源计划团队章程","toolsDetail":{"数据表现":"层级型（OBS/WBS/RBS）、矩阵型（RAM/RACI）、文本型（角色描述）"},"examTips":["RACI矩阵：R=执行（Responsible）、A=负责（Accountable）、C=咨询（Consult）、I=知情（Inform）","一个任务只能有一个A（Accountable），但可以有多个R","团队章程包含：团队价值观、沟通指南、决策标准、冲突处理流程、会议指南","资源管理计划包含角色与职责、项目组织图、培训策略、资源获取策略"]},{"id":"9.2","name":"估算活动资源","nameEn":"Estimate Activity Resources","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"resource","knowledgeAreaCn":"项目资源管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","自下而上估算","类比估算","参数估算","数据分析","项目管理信息系统","会议"],"outputs":["资源需求","估算依据","资源分解结构","项目文件更新"]},"keyPoints":"估算每个活动所需的人员、设备和材料类型及数量。资源分解结构按资源类别和类型层级展示资源，类似WBS但面向资源。与进度管理中的活动资源估算已合并到本过程。","mnemonic":"管文事组入，专底类参分系议出，资源需求分解结构","examTips":["资源分解结构（RBS）：按资源类别和类型层级展示，类似WBS但面向资源","PMBOK第6版将原进度管理中的活动资源估算合并到本过程","资源估算同时考虑人员、设备和材料，不仅限于人力"]},{"id":"9.3","name":"获取资源","nameEn":"Acquire Resources","processGroup":"executing","processGroupCn":"执行过程组","knowledgeArea":"resource","knowledgeAreaCn":"项目资源管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["决策","人际关系与团队技能","预分派","虚拟团队"],"outputs":["物质资源分配单","项目团队派工单","资源日历","变更请求","项目管理计划更新","项目文件更新","事业环境因素更新","组织过程资产更新"]},"keyPoints":"获取资源包括人员获取和物质资源获取。预分派适用于竞标中承诺特定人员、项目取决于特定人员的专长的情况。虚拟团队可以克服地理距离障碍但增加沟通成本。多标准决策分析用于选择最佳团队成员。","mnemonic":"管文事组入，决关预虚出，分配日历变更记","toolsDetail":{"决策":"多标准决策分析：按可用性、成本、经验、能力、知识、技能、态度等标准选择团队成员","人际关系与团队技能":"谈判——与职能经理谈判获取人员，与其他项目经理谈判共享资源"},"examTips":["预分派三种情况：竞标中承诺特定人员、项目取决于特定专长、章程中指定人员","项目经理在矩阵型组织中通常需要通过谈判获取团队成员","虚拟团队优势：跨地域组建团队、利用全球人才；劣势：沟通成本高、文化差异","获取资源属于执行过程组——不是规划阶段完成的"]},{"id":"9.4","name":"建设团队","nameEn":"Develop Team","processGroup":"executing","processGroupCn":"执行过程组","knowledgeArea":"resource","knowledgeAreaCn":"项目资源管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["集中办公","虚拟团队","培训","团队建设活动","认可与奖励","个人和团队评估","会议"],"outputs":["团队绩效评价","变更请求","项目管理计划更新","项目文件更新","事业环境因素更新","组织过程资产更新"]},"keyPoints":"塔克曼团队发展五阶段：形成期→震荡期→规范期→成熟期→解散期。集中办公（作战室）增强凝聚力。认可与奖励要及时且基于绩效。团队绩效评价包括个人绩效、团队绩效和项目绩效。","mnemonic":"管文事组入，集虚培团建认评估议出，团队绩效评价来","formulas":[{"name":"塔克曼团队发展阶梯","formula":"形成期 → 震荡期 → 规范期 → 成熟期 → 解散期","explain":"Forming→Storming→Norming→Performing→Adjourning；团队绩效在成熟期达到最高","example":"震荡期冲突最多，项目经理需要更多指导和协调；成熟期团队自主高效运转"}],"examTips":["塔克曼五阶段必考：形成→震荡→规范→成熟→解散（顺序不能乱）","震荡期冲突最多，需要项目经理更多介入；成熟期团队最高效","认可与奖励：要及时、基于绩效、考虑文化差异","集中办公（Co-location/War Room）是建设团队的有效手段","培训可以是正式的或非正式的，由项目经理安排或团队成员自行学习"]},{"id":"9.5","name":"管理团队","nameEn":"Manage Team","processGroup":"executing","processGroupCn":"执行过程组","knowledgeArea":"resource","knowledgeAreaCn":"项目资源管理","itto":{"inputs":["项目管理计划","项目文件","工作绩效报告","团队绩效评价","事业环境因素","组织过程资产"],"tools":["人际关系与团队技能","冲突管理","项目管理信息系统"],"outputs":["变更请求","项目管理计划更新","项目文件更新","事业环境因素更新","组织过程资产更新"]},"keyPoints":"冲突管理五种方法（按效果排序）：合作/解决问题（最佳）、妥协/调解、缓和/包容、强制/命令（最差）、撤退/回避。情商是管理团队的关键能力，项目经理应关注自我意识和自我管理。","mnemonic":"管文报团事组入，人冲系出力，变更更新事业组","toolsDetail":{"冲突管理":"合作/解决问题（Collaborate，最佳，双赢）→ 妥协/调解（Compromise）→ 缓和/包容（Smooth）→ 强制/命令（Force，最差，双输）→ 撤退/回避（Withdraw，最差，双输）","人际关系与团队技能":"情商（自我意识、自我管理、社会意识、关系管理）、影响力、决策"},"examTips":["冲突解决五种方法必背：合作>妥协>缓和>强制>撤退","合作/解决问题 = 最佳方案（双赢，长期解决）","强制/命令 = 最差方案（双输，但紧急情况下可能需要）","撤退/回避 = 临时性方案（推迟问题，不解决根本）","冲突是不可避免的，适度冲突有益；项目经理应主动管理冲突"]},{"id":"9.6","name":"控制资源","nameEn":"Control Resources","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"resource","knowledgeAreaCn":"项目资源管理","itto":{"inputs":["项目管理计划","项目文件","工作绩效数据","协议","组织过程资产"],"tools":["数据分析","问题解决","人际关系与团队技能","项目管理信息系统"],"outputs":["工作绩效信息","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"PMBOK第6版新增过程，关注物质资源的监控（非团队管理）。确保资源按计划到位并有效使用，处理资源不足或过剩的问题。人际关系技能用于谈判资源释放和解决资源冲突。","mnemonic":"管文绩协组入，分决人系出，绩效变更更新记","examTips":["PMBOK第6版新增过程——软考考点","控制资源关注物质资源（设备、材料、设施），不是团队人员","团队管理在9.5管理团队中处理，本过程专注物质资源","协议是本过程输入——用于监控外部租赁资源的绩效"]},{"id":"10.1","name":"规划沟通管理","nameEn":"Plan Communications Management","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"communications","knowledgeAreaCn":"项目沟通管理","itto":{"inputs":["项目章程","项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","沟通需求分析","沟通技术","沟通模型","沟通方法","人际关系与团队技能","数据表现","会议"],"outputs":["沟通管理计划","项目管理计划更新","项目文件更新"]},"keyPoints":"沟通渠道数 = n(n-1)/2，n为相关方人数。新增一人增加n条渠道。沟通方式包括交互式沟通（会议）、推式沟通（邮件/报告）、拉式沟通（知识库/网站）。沟通需求分析确定谁需要什么信息、何时需要、如何传递。","mnemonic":"章管文事组入，专需技模方关表议出，沟通管理计划来","toolsDetail":{"沟通方法":"交互式沟通（双向对话，最有效）：会议、电话；推式沟通（单向发送）：邮件、报告、备忘录；拉式沟通（接收者主动获取）：知识库、网站、电子资料库"},"formulas":[{"name":"沟通渠道数","formula":"N = n(n-1) / 2","explain":"n为相关方总人数（含项目经理）；每增加1人，渠道增加n条","example":"5人团队：N=5×4/2=10条渠道；增加到6人：N=6×5/2=15条，增加5条"},{"name":"新增一人的渠道变化","formula":"ΔN = n（原有总人数）","explain":"在n人团队中增加1人，沟通渠道增加n条","example":"原10人团队增加到11人：原渠道=10×9/2=45，新渠道=11×10/2=55，增加10条"}],"examTips":["沟通渠道公式 n(n-1)/2 是必考公式——注意n包含项目经理本人","每增加1人，渠道增加n条（原有人数）——指数级增长","三种沟通方式：交互式（最有效）、推式（单向发送）、拉式（接收者主动获取）","沟通管理计划规定：谁需要什么信息、何时需要、用什么方式传递"]},{"id":"10.2","name":"管理沟通","nameEn":"Manage Communications","processGroup":"executing","processGroupCn":"执行过程组","knowledgeArea":"communications","knowledgeAreaCn":"项目沟通管理","itto":{"inputs":["项目管理计划","项目文件","工作绩效报告","事业环境因素","组织过程资产"],"tools":["沟通技术","沟通方法","沟通技能","项目管理信息系统","项目报告","人际关系与团队技能","会议"],"outputs":["项目沟通记录","项目管理计划更新","项目文件更新","组织过程资产更新"]},"keyPoints":"管理沟通是确保信息及时生成、收集、分发、存储和处置的过程。沟通技能包括积极倾听、文化意识、政治意识等。项目报告是整合绩效信息的综合报告。","mnemonic":"管文报事组入，技方技系报关议出，沟通记录更新记","examTips":["管理沟通 = 执行沟通计划，确保信息正确传递","沟通技能包括：积极倾听、文化意识、政治意识、反馈、演示技能","有效沟通占项目经理工作时间的75%-90%","项目报告是本过程的输入（来自监控项目工作），用于分发给相关方"]},{"id":"10.3","name":"监督沟通","nameEn":"Monitor Communications","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"communications","knowledgeAreaCn":"项目沟通管理","itto":{"inputs":["项目管理计划","项目文件","工作绩效数据","事业环境因素","组织过程资产"],"tools":["专家判断","项目管理信息系统","数据分析","人际关系与团队技能","会议"],"outputs":["工作绩效信息","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"监督沟通确保满足项目及其相关方的信息需求。关注沟通的有效性而非仅仅是信息的分发。如果相关方对信息不满意，可能需要调整沟通策略或方法。","mnemonic":"管文绩事组入，专系数关议出，绩效变更更新记","examTips":["监督沟通关注有效性——信息是否被正确理解和产生预期效果","区别于管理沟通（关注信息分发）：监督沟通关注沟通效果","如果相关方对信息不满意 → 可能需要更新沟通管理计划"]},{"id":"11.1","name":"规划风险管理","nameEn":"Plan Risk Management","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"risk","knowledgeAreaCn":"项目风险管理","itto":{"inputs":["项目章程","项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","数据分析","会议"],"outputs":["风险管理计划"]},"keyPoints":"风险管理计划定义风险管理的策略、方法论、工具、角色与职责、预算和时间安排。包括概率和影响矩阵的定义、相关方风险偏好和风险承受力。与风险管理计划不同于风险登记册。","mnemonic":"章管文事组入，专数会议出，一个风险管理计划","examTips":["风险管理计划 ≠ 风险登记册：前者是方法论，后者是具体风险清单","风险管理计划包含：概率影响矩阵定义、风险类别、预算和时间安排","风险偏好 = 愿意接受的风险程度；风险承受力 = 能承受的最大风险","风险管理计划是项目管理计划的子计划"]},{"id":"11.2","name":"识别风险","nameEn":"Identify Risks","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"risk","knowledgeAreaCn":"项目风险管理","itto":{"inputs":["项目管理计划","项目文件","协议","采购文档","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","数据分析","人际关系与团队技能","提示清单"],"outputs":["风险登记册","风险报告","项目文件更新"]},"keyPoints":"风险登记册记录单个项目风险，风险报告记录整体项目风险。提示清单包括战略、技术、外部、组织、项目管理等类别（STEEPL等框架）。识别风险是反复进行的过程，贯穿项目全生命周期。","mnemonic":"管文协采事组入，专收分关提出，登记册加风险报告","toolsDetail":{"数据收集":"头脑风暴、核查表、访谈","数据分析":"根本原因分析、假设和制约因素分析、SWOT分析（优势/劣势/机会/威胁）"},"examTips":["风险登记册 = 单个风险清单；风险报告 = 整体风险概述","SWOT分析（优势、劣势、机会、威胁）同时识别威胁和机会","识别风险贯穿项目全生命周期——不是一次性工作","提示清单（Prompt List）= TECOP或STEEPL框架，帮助系统化识别风险类别"]},{"id":"11.3","name":"实施定性风险分析","nameEn":"Perform Qualitative Risk Analysis","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"risk","knowledgeAreaCn":"项目风险管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","数据分析","人际关系与团队技能","风险分类","数据表现","会议"],"outputs":["项目文件更新"]},"keyPoints":"定性风险分析通过概率和影响评估对风险进行优先级排序，使用概率影响矩阵。风险分类可按来源（技术、外部、组织等）或项目阶段分类。本过程不产生独立输出文件，只更新风险登记册和风险报告。","mnemonic":"管文事组入，专收分关分表议出，更新文件（登记册报告）","toolsDetail":{"数据分析":"风险概率和影响评估、概率和影响矩阵、风险数据质量评估、风险分类"},"examTips":["定性分析 = 主观判断优先级排序；定量分析 = 数值化评估影响","概率影响矩阵是定性分析的核心工具——将风险按概率×影响分级","定性分析通常先于定量分析进行（先筛选再做数值分析）","本过程输出只有项目文件更新（更新风险登记册和风险报告）"]},{"id":"11.4","name":"实施定量风险分析","nameEn":"Perform Quantitative Risk Analysis","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"risk","knowledgeAreaCn":"项目风险管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","人际关系与团队技能","不确定性表现方式","数据分析"],"outputs":["项目文件更新"]},"keyPoints":"定量风险分析用数值方法评估风险对项目目标的综合影响。蒙特卡洛模拟是最常用的定量分析技术，通过多次模拟产生概率分布。敏感性分析（龙卷风图）识别影响最大的风险。EMV（期望货币值）=概率x影响。","mnemonic":"管文事组入，专收关不分出，更新文件（登记册报告）","toolsDetail":{"数据分析":"蒙特卡洛模拟（多次随机模拟产生概率分布）、敏感性分析（龙卷风图）、决策树分析、影响图"},"formulas":[{"name":"期望货币值 EMV","formula":"EMV = P × I","explain":"P=概率，I=影响（金额）；威胁为负值，机会为正值；用于决策树分析","example":"风险概率30%，影响-100万 → EMV = 0.3 × (-100) = -30万"}],"examTips":["EMV = 概率 × 影响（金额）——决策树分析的基础","蒙特卡洛模拟：通过多次随机模拟产生概率分布和置信区间","敏感性分析使用龙卷风图——识别对项目影响最大的单个风险","定量分析不是每个项目都需要，大型复杂项目更需要","本过程输出也只有项目文件更新"]},{"id":"11.5","name":"规划风险应对","nameEn":"Plan Risk Responses","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"risk","knowledgeAreaCn":"项目风险管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","人际关系与团队技能","威胁应对策略","机会应对策略","应急应对策略","整体项目风险应对策略","数据分析","决策"],"outputs":["变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"威胁应对策略：上报、规避、转移、减轻、接受。机会应对策略：上报、开拓、分享、提高、接受。应急应对策略针对特定触发条件。二次风险是实施风险应对措施后产生的新风险。弹性和适应型项目更适合应对不确定性。","mnemonic":"管文事组入，专收关威机应整数决出，变更更新文件记","toolsDetail":{"威胁应对策略":"上报（Escalate，超出项目经理权限）、规避（Avoid，改变计划消除威胁）、转移（Transfer，转给第三方如保险）、减轻（Mitigate，降低概率或影响）、接受（Accept，被动接受或主动建立应急储备）","机会应对策略":"上报（Escalate）、开拓（Exploit，确保机会实现）、分享（Share，与第三方合作）、提高（Enhance，增加概率或影响）、接受（Accept）"},"examTips":["威胁五种策略必记：上报→规避→转移→减轻→接受","机会五种策略必记：上报→开拓→分享→提高→接受","转移 vs 减轻：转移是把风险转给第三方（如买保险），减轻是降低概率或影响","二次风险 = 实施应对措施后产生的新风险；残余风险 = 应对后仍残留的风险","规避 = 消除威胁（改变项目范围/计划）；减轻 = 降低概率或影响（但不消除）"]},{"id":"11.6","name":"实施风险应对","nameEn":"Implement Risk Responses","processGroup":"executing","processGroupCn":"执行过程组","knowledgeArea":"risk","knowledgeAreaCn":"项目风险管理","itto":{"inputs":["项目管理计划","项目文件","组织过程资产"],"tools":["专家判断","人际关系与团队技能","项目管理信息系统"],"outputs":["变更请求","项目文件更新"]},"keyPoints":"PMBOK第6版新增过程，执行已规划的风险应对措施。风险责任人负责实施应对措施。如果应对措施未执行或无效，需要更新风险登记册并考虑替代方案。","mnemonic":"管文组入，专人系出力，变更更新文件记","examTips":["PMBOK第6版新增过程——软考高频新增考点","风险责任人（Risk Owner）负责实施已规划的风险应对措施","本过程属于执行过程组——将风险应对计划付诸实施","如果应对措施无效，需返回规划风险应对制定新策略"]},{"id":"11.7","name":"监督风险","nameEn":"Monitor Risks","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"risk","knowledgeAreaCn":"项目风险管理","itto":{"inputs":["项目管理计划","项目文件","工作绩效数据","工作绩效报告","组织过程资产"],"tools":["数据分析","审计","会议"],"outputs":["工作绩效信息","变更请求","项目管理计划更新","项目文件更新","组织过程资产更新"]},"keyPoints":"监督风险是跟踪已识别风险、监控残余风险、识别新风险、评估风险过程有效性的过程。风险审计检查风险应对的有效性，可在日常会议或专项审查中进行。","mnemonic":"管文绩报组入，分审议出，绩效变更更新记","toolsDetail":{"数据分析":"风险再评估（定期识别新风险）、风险审计（检查应对措施有效性）、偏差和趋势分析"},"examTips":["风险审计检查风险应对措施的有效性，不同于质量审计","风险再评估：定期重新识别新风险、评估已有风险、关闭过时风险","残余风险 = 实施应对后仍然存在的风险；需持续监控","监督风险贯穿项目全生命周期，是持续进行的活动"]},{"id":"12.1","name":"规划采购管理","nameEn":"Plan Procurement Management","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"procurement","knowledgeAreaCn":"项目采购管理","itto":{"inputs":["项目章程","商业文件","项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","数据分析","供方选择分析","会议"],"outputs":["采购管理计划","采购策略","招标文件","采购工作说明书","自制或外购决策","独立成本估算","变更请求","项目文件更新","组织过程资产更新"]},"keyPoints":"自制或外购分析是最核心的决策工具。合同类型三大类：固定总价（FFP/FPIF/FPEPA）、成本补偿（CPFF/CPIF/CPAF）、工料合同（T&M）。买方风险：固定总价最低；卖方风险：成本补偿最高。工料合同兼具两者特点。","mnemonic":"章商管文事组入，专收分供议出，采购计划策略文件","toolsDetail":{"数据分析":"自制或外购分析（核心决策工具）、独立估算（作为评估卖方报价的基准）","供方选择分析":"最低成本、仅凭资质、基于质量和成本、基于质量和费用、独有来源"},"formulas":[{"name":"自制或外购分析","formula":"比较：自制成本 vs 外购成本","explain":"自制成本=固定成本+单位可变成本×数量；外购成本=采购单价×数量；选择总成本更低的方案","example":"自制：固定5万+单位100元；外购：单价150元 → 平衡点=50000/(150-100)=1000件；<1000件外购，>1000件自制"},{"name":"合同风险分配","formula":"固定总价→买方风险最低；成本补偿→卖方风险最低","explain":"工料合同介于两者之间；买方应在需求明确时选固定总价，需求不明确时选成本补偿","example":"需求明确→固定总价FFP（买方锁定价格）；需求不确定→成本加固定费CPFF（卖方不承担超支风险）"}],"examTips":["合同类型与风险分配是必考内容——三大类六种合同","固定总价（FFP）：买方风险最小，卖方承担超支风险；需求必须明确","成本补偿（CPFF/CPIF）：卖方风险最小，买方承担超支风险；需求不明确时用","工料合同（T&M）：兼具两者特点，适用于小型、时间紧的项目","FPIF（固定总价加激励费）：有最高限价（Ceiling Price），超过部分卖方承担","独立成本估算作为评估卖方报价合理性的基准"]},{"id":"12.2","name":"实施采购","nameEn":"Conduct Procurements","processGroup":"executing","processGroupCn":"执行过程组","knowledgeArea":"procurement","knowledgeAreaCn":"项目采购管理","itto":{"inputs":["项目管理计划","项目文件","采购文档","卖方建议书","事业环境因素","组织过程资产"],"tools":["专家判断","广告","投标人会议","数据分析","人际关系与团队技能"],"outputs":["选定的卖方","协议","变更请求","项目管理计划更新","项目文件更新","组织过程资产更新"]},"keyPoints":"投标人会议（承包商会议、供应商会议）确保所有潜在卖方对采购要求有清晰统一的理解。评估卖方建议书时可使用加权系统、筛选系统等工具。协议（合同）是买卖双方之间的法律文件。","mnemonic":"管文采建事组入，专广投分关出，选定卖方签协议","examTips":["投标人会议：所有潜在卖方同时参加，确保信息对称、理解一致","投标人会议上不允许私下与个别卖方交流——确保公平","协议（合同）在实施采购过程中签订，是法律约束力文件","加权系统和筛选系统用于客观评估卖方建议书"]},{"id":"12.3","name":"控制采购","nameEn":"Control Procurements","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"procurement","knowledgeAreaCn":"项目采购管理","itto":{"inputs":["项目管理计划","项目文件","协议","采购文档","批准的变更请求","工作绩效数据","事业环境因素","组织过程资产"],"tools":["专家判断","索赔管理","数据分析","检查","审计"],"outputs":["变更请求","工作绩效信息","采购关闭","项目管理计划更新","项目文件更新","组织过程资产更新"]},"keyPoints":"控制采购管理采购关系，监督合同执行，进行变更和纠正措施。索赔管理处理合同争议。采购审计总结采购过程的经验教训。采购关闭在合同完成或终止时进行，类似项目收尾。","mnemonic":"管文协采批绩事组入，专索分检审出，变更绩效采购关闭","toolsDetail":{"索赔管理":"当合同双方无法达成一致时，通过谈判、调解或仲裁解决争议","审计":"采购审计（Procurement Audit）：总结采购过程的经验教训，供未来参考"},"examTips":["采购关闭类似项目收尾——合同完成或提前终止时进行","采购审计总结采购经验教训，属于组织过程资产更新","索赔管理处理合同争议——优先谈判，谈判不成可仲裁或诉讼","采购关闭是控制采购的输出之一"]},{"id":"13.1","name":"识别相关方","nameEn":"Identify Stakeholders","processGroup":"initiating","processGroupCn":"启动过程组","knowledgeArea":"stakeholder","knowledgeAreaCn":"项目相关方管理","itto":{"inputs":["项目章程","商业文件","项目管理计划","项目文件","协议","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","数据分析","数据表现","会议"],"outputs":["相关方登记册","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"相关方分析使用权力/利益方格、凸显模型等工具识别和分析相关方。相关方登记册记录身份信息、评估信息和分类。应在项目早期就开始识别，且需持续进行。凸显模型基于权力、紧迫性和合法性三维度。","mnemonic":"章商管文协事组入，专收分表议出，相关方登记册变更记","toolsDetail":{"数据收集":"问卷调查、头脑风暴","数据分析":"相关方分析（识别、分类、评估）、文件分析","数据表现":"权力/利益方格、权力/影响方格、影响/作用方格、凸显模型"},"examTips":["识别相关方应在项目最早期就开始——越早识别越主动","凸显模型三维度：权力（Power）、紧迫性（Urgency）、合法性（Legitimacy）","权力/利益方格：高权力高利益=重点管理；高权力低利益=令其满意","相关方登记册包含：身份信息、评估信息（期望、影响）、相关方分类","识别相关方是持续进行的活动，不是启动阶段一次性完成"]},{"id":"13.2","name":"规划相关方参与","nameEn":"Plan Stakeholder Engagement","processGroup":"planning","processGroupCn":"规划过程组","knowledgeArea":"stakeholder","knowledgeAreaCn":"项目相关方管理","itto":{"inputs":["项目章程","项目管理计划","项目文件","协议","事业环境因素","组织过程资产"],"tools":["专家判断","数据收集","数据分析","决策","数据表现","会议"],"outputs":["相关方参与计划","项目管理计划更新","项目文件更新"]},"keyPoints":"相关方参与评估矩阵使用五个参与程度：不了解、抵制、中立、支持、领导。对比当前参与程度（C）和期望参与程度（D），制定策略弥合差距。相关方参与计划可能是敏感信息，需控制访问权限。","mnemonic":"章管文协事组入，专收分决表议出，相关方参与计划来","toolsDetail":{"数据表现":"相关方参与评估矩阵：五个参与程度（不了解Unaware、抵制Resistant、中立Neutral、支持Supportive、领导Leading）；C=当前状态，D=期望状态"},"examTips":["五个参与程度必记：不了解→抵制→中立→支持→领导","C=当前参与程度，D=期望参与程度——策略是弥合C与D的差距","相关方参与计划是敏感文件，需要控制访问权限","相关方参与计划包含：当前和期望参与程度、影响范围和策略"]},{"id":"13.3","name":"管理相关方参与","nameEn":"Manage Stakeholder Engagement","processGroup":"executing","processGroupCn":"执行过程组","knowledgeArea":"stakeholder","knowledgeAreaCn":"项目相关方管理","itto":{"inputs":["项目管理计划","项目文件","事业环境因素","组织过程资产"],"tools":["专家判断","沟通技能","人际关系与团队技能","基本规则","会议"],"outputs":["变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"管理相关方参与是与相关方沟通和协作以满足其需求的过程。基本规则（地面规则）定义项目团队成员可接受的行为。沟通技能包括反馈、演示等。这是相关方管理中最关键的执行过程。","mnemonic":"管文事组入，专通关基议出，变更更新计划文","examTips":["管理相关方参与 = 执行参与计划，与相关方互动满足其需求","基本规则（Ground Rules）定义可接受行为，属于本过程工具","管理相关方参与会产生变更请求——相关方需求可能影响项目","沟通技能包括：反馈、演示技能、积极倾听、文化意识"]},{"id":"13.4","name":"监督相关方参与","nameEn":"Monitor Stakeholder Engagement","processGroup":"monitoring","processGroupCn":"监控过程组","knowledgeArea":"stakeholder","knowledgeAreaCn":"项目相关方管理","itto":{"inputs":["项目管理计划","项目文件","工作绩效数据","事业环境因素","组织过程资产"],"tools":["数据分析","决策","会议"],"outputs":["工作绩效信息","变更请求","项目管理计划更新","项目文件更新"]},"keyPoints":"监督相关方参与评估相关方关系和策略的有效性。随着项目推进，相关方可能发生变化（新增或退出），需要调整参与策略。数据分析包括备选方案分析和根本原因分析。","mnemonic":"管文绩事组入，分决议出，绩效变更更新记","examTips":["监督相关方参与 = 评估参与策略的有效性并调整","相关方可能随项目阶段变化——需要持续识别和调整","根本原因分析：分析相关方不满意或抵制的原因","与其他监控过程类似，输出包含工作绩效信息和变更请求"]}];
+
+/* ============================================================
+   过程组配色映射
+   ============================================================ */
+const GROUP_COLORS = {
+  initiating: { bg: '#e8f5e9', fg: '#2e7d32' },
+  planning:   { bg: '#e3f2fd', fg: '#1565c0' },
+  executing:  { bg: '#fff3e0', fg: '#e65100' },
+  monitoring: { bg: '#f3e5f5', fg: '#7b1fa2' },
+  closing:    { bg: '#fce4ec', fg: '#c62828' }
+};
+
+/* 过程组中文简称 */
+const GROUP_SHORT = {
+  initiating: '启动',
+  planning: '规划',
+  executing: '执行',
+  monitoring: '监控',
+  closing: '收尾'
+};
+
+/* 知识领域中文简称 */
+const AREA_SHORT = {
+  integration: '整合',
+  scope: '范围',
+  schedule: '进度',
+  cost: '成本',
+  quality: '质量',
+  resource: '资源',
+  communications: '沟通',
+  risk: '风险',
+  procurement: '采购',
+  stakeholder: '相关方'
+};
+
+/* ============================================================
+   应用状态
+   ============================================================ */
+const STORAGE_KEY = 'pmbok_progress';
+
+let state = {
+  mastered: new Set(),
+  review: new Set(),
+  favorites: new Set(),
+  mode: 'browse',        // browse | random | review
+  groupFilter: 'all',    // all | initiating | planning | ...
+  areaFilter: 'all',     // all | integration | scope | ...
+  currentIndex: 0,
+  flipped: false,
+  shuffledOrder: null     // 随机模式下的排列
+};
+
+/* ============================================================
+   持久化存储
+   ============================================================ */
+function saveState() {
+  const data = {
+    mastered: [...state.mastered],
+    review: [...state.review],
+    favorites: [...state.favorites],
+    mode: state.mode,
+    groupFilter: state.groupFilter,
+    areaFilter: state.areaFilter
+  };
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data.mastered) state.mastered = new Set(data.mastered);
+    if (data.review) state.review = new Set(data.review);
+    if (data.favorites) state.favorites = new Set(data.favorites);
+    if (data.mode) state.mode = data.mode;
+    if (data.groupFilter) state.groupFilter = data.groupFilter;
+    if (data.areaFilter) state.areaFilter = data.areaFilter;
+  } catch(e) {}
+}
+
+/* ============================================================
+   筛选后的卡片列表
+   ============================================================ */
+function getFilteredCards() {
+  let cards = PMBOK_DATA;
+
+  // 错题本模式：只显示需复习的
+  if (state.mode === 'review') {
+    cards = cards.filter(c => state.review.has(c.id));
+  }
+
+  // 过程组筛选
+  if (state.groupFilter !== 'all') {
+    cards = cards.filter(c => c.processGroup === state.groupFilter);
+  }
+
+  // 知识领域筛选
+  if (state.areaFilter !== 'all') {
+    cards = cards.filter(c => c.knowledgeArea === state.areaFilter);
+  }
+
+  // 随机模式排列
+  if (state.mode === 'random' && state.shuffledOrder) {
+    const idSet = new Set(cards.map(c => c.id));
+    cards = state.shuffledOrder.filter(id => idSet.has(id)).map(id => cards.find(c => c.id === id));
+  }
+
+  return cards;
+}
+
+/* 生成随机排列 */
+function generateShuffle() {
+  const ids = PMBOK_DATA.map(c => c.id);
+  for (let i = ids.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [ids[i], ids[j]] = [ids[j], ids[i]];
+  }
+  state.shuffledOrder = ids;
+}
+
+/* ============================================================
+   渲染函数
+   ============================================================ */
+
+/* 更新统计栏 */
+function renderStats() {
+  const total = PMBOK_DATA.length;
+  const masteredCount = state.mastered.size;
+  const reviewCount = state.review.size;
+  const favCount = state.favorites.size;
+  const unlearned = total - masteredCount;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statMastered').textContent = masteredCount;
+  document.getElementById('statReview').textContent = reviewCount;
+  document.getElementById('statUnlearned').textContent = unlearned;
+  document.getElementById('statFav').textContent = favCount;
+
+  const pct = total > 0 ? Math.round(masteredCount / total * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = '掌握进度: ' + pct + '% (' + masteredCount + '/' + total + ')';
+}
+
+/* 渲染筛选器 */
+function renderFilters() {
+  // 过程组
+  const groupCounts = {};
+  PMBOK_DATA.forEach(c => {
+    groupCounts[c.processGroup] = (groupCounts[c.processGroup] || 0) + 1;
+  });
+  const groupKeys = ['all', 'initiating', 'planning', 'executing', 'monitoring', 'closing'];
+  const groupLabels = { all: '全部', initiating: '启动', planning: '规划', executing: '执行', monitoring: '监控', closing: '收尾' };
+  const groupContainer = document.getElementById('groupFilters');
+  groupContainer.innerHTML = groupKeys.map(k => {
+    const count = k === 'all' ? PMBOK_DATA.length : (groupCounts[k] || 0);
+    const active = state.groupFilter === k ? ' active' : '';
+    return '<div class="filter-chip' + active + '" data-group="' + k + '">' + groupLabels[k] + ' <span class="count">(' + count + ')</span></div>';
+  }).join('');
+
+  // 知识领域
+  const areaCounts = {};
+  PMBOK_DATA.forEach(c => {
+    areaCounts[c.knowledgeArea] = (areaCounts[c.knowledgeArea] || 0) + 1;
+  });
+  const areaKeys = ['all', 'integration', 'scope', 'schedule', 'cost', 'quality', 'resource', 'communications', 'risk', 'procurement', 'stakeholder'];
+  const areaLabels = { all: '全部', integration: '整合', scope: '范围', schedule: '进度', cost: '成本', quality: '质量', resource: '资源', communications: '沟通', risk: '风险', procurement: '采购', stakeholder: '相关方' };
+  const areaContainer = document.getElementById('areaFilters');
+  areaContainer.innerHTML = areaKeys.map(k => {
+    const count = k === 'all' ? PMBOK_DATA.length : (areaCounts[k] || 0);
+    const active = state.areaFilter === k ? ' active' : '';
+    return '<div class="filter-chip' + active + '" data-area="' + k + '">' + areaLabels[k] + ' <span class="count">(' + count + ')</span></div>';
+  }).join('');
+}
+
+/* 渲染当前卡片 */
+function renderCard() {
+  const cards = getFilteredCards();
+  const stage = document.getElementById('cardStage');
+  const counter = document.getElementById('cardCounter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+
+  // 显示/隐藏 shuffle 按钮
+  shuffleBtn.style.display = state.mode === 'random' ? 'inline-block' : 'none';
+
+  // 空状态
+  if (cards.length === 0) {
+    stage.innerHTML = '<div class="empty-state"><div class="icon">📭</div><div class="msg">' +
+      (state.mode === 'review' ? '暂无需复习的卡片<br>所有卡片已掌握或在"浏览学习"中标记需复习的卡片' : '当前筛选条件下暂无卡片') +
+      '</div></div>';
+    counter.textContent = '第 0 / 0 张';
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+    updateActionButtons(null);
+    return;
+  }
+
+  // 修正索引
+  if (state.currentIndex >= cards.length) state.currentIndex = 0;
+  if (state.currentIndex < 0) state.currentIndex = cards.length - 1;
+
+  const card = cards[state.currentIndex];
+  counter.textContent = '第 ' + (state.currentIndex + 1) + ' / ' + cards.length + ' 张';
+  prevBtn.disabled = cards.length <= 1;
+  nextBtn.disabled = cards.length <= 1;
+
+  const gc = GROUP_COLORS[card.processGroup] || { bg: '#f5f5f5', fg: '#666' };
+
+  // 状态标记
+  let statusHtml = '';
+  if (state.mastered.has(card.id)) statusHtml += '<span class="status-pill mastered">已掌握</span>';
+  if (state.review.has(card.id)) statusHtml += '<span class="status-pill review">需复习</span>';
+  if (state.favorites.has(card.id)) statusHtml += '<span class="status-pill fav">已收藏</span>';
+
+  // 正面
+  const frontHtml = '<div class="card-face card-front"><div class="front-inner">' +
+    '<div class="process-badge">' + card.id + '</div>' +
+    '<div class="front-tags">' +
+      '<span class="tag-group" style="background:' + gc.bg + ';color:' + gc.fg + '">' + card.processGroupCn + '</span>' +
+      '<span class="tag-area" style="background:var(--primary-light);color:var(--primary-dark)">' + card.knowledgeAreaCn + '</span>' +
+    '</div>' +
+    '<div class="process-name-cn">' + card.name + '</div>' +
+    '<div class="process-name-en">' + card.nameEn + '</div>' +
+    (statusHtml ? '<div class="status-badges">' + statusHtml + '</div>' : '') +
+    '<div class="flip-hint">点击翻转查看详情 ↻</div>' +
+    '</div></div>';
+
+  // 背面
+  /* ITTO chips */
+  const inputChips = card.itto.inputs.map(function(i) { return '<span class="itto-chip">' + i + '</span>'; }).join('');
+  const toolChips = card.itto.tools.map(function(t) { return '<span class="itto-chip">' + t + '</span>'; }).join('');
+  const outputChips = card.itto.outputs.map(function(o) { return '<span class="itto-chip">' + o + '</span>'; }).join('');
+
+  /* 工具详情 (toolsDetail) */
+  let toolsDetailHtml = '';
+  if (card.toolsDetail && Object.keys(card.toolsDetail).length > 0) {
+    const uid = 'td_' + card.id.replace(/\./g, '_');
+    toolsDetailHtml = '<div class="tools-detail">' +
+      '<div class="tools-detail-title" onclick="toggleToolsDetail(\'' + uid + '\')">' +
+        '<span class="arrow" id="' + uid + '_arrow">\u25B6</span> \uD83D\uDD0D 工具详情展开' +
+      '</div>' +
+      '<div class="tools-detail-content" id="' + uid + '_content">' +
+      Object.entries(card.toolsDetail).map(function(entry) {
+        return '<div class="tools-detail-item"><strong>' + entry[0] + '：</strong>' + entry[1] + '</div>';
+      }).join('') +
+      '</div></div>';
+  }
+
+  /* 公式 (formulas) */
+  let formulasHtml = '';
+  if (card.formulas && card.formulas.length > 0) {
+    formulasHtml = '<div class="formulas-section">' +
+      '<div class="formulas-label">\uD83D\uDCD0 公式 Formulas</div>' +
+      card.formulas.map(function(f) {
+        return '<div class="formula-card">' +
+          '<div class="formula-name">' + f.name + '</div>' +
+          '<div class="formula-expr">' + f.formula + '</div>' +
+          '<div class="formula-explain">' + f.explain + '</div>' +
+          (f.example ? '<div class="formula-example">\uD83D\uDCA1 ' + f.example + '</div>' : '') +
+        '</div>';
+      }).join('') +
+    '</div>';
+  }
+
+  /* 考试提示 (examTips) */
+  let examTipsHtml = '';
+  if (card.examTips && card.examTips.length > 0) {
+    examTipsHtml = '<div class="exam-tips">' +
+      '<div class="exam-tips-label">\u26A0\uFE0F 考试提示 Exam Tips</div>' +
+      card.examTips.map(function(tip) { return '<div class="exam-tip-item">' + tip + '</div>'; }).join('') +
+    '</div>';
+  }
+
+  /* 过程链接 (processLinks) */
+  let processLinksHtml = '';
+  if (card.processLinks) {
+    let linkItems = '';
+    if (card.processLinks.inputsFrom && card.processLinks.inputsFrom.length > 0) {
+      linkItems += '<div class="process-link-group">' +
+        '<div class="process-link-group-title">输入来源</div>' +
+        card.processLinks.inputsFrom.map(function(l) {
+          return '<div class="process-link-item from"><span class="link-process">' + l.from + '</span> <span class="link-item">\u2190 ' + l.item + '</span></div>';
+        }).join('') +
+      '</div>';
+    }
+    if (card.processLinks.outputsTo && card.processLinks.outputsTo.length > 0) {
+      linkItems += '<div class="process-link-group">' +
+        '<div class="process-link-group-title">输出去向</div>' +
+        card.processLinks.outputsTo.map(function(l) {
+          return '<div class="process-link-item to"><span class="link-process">' + l.to + '</span> <span class="link-item">\u2192 ' + l.item + '</span></div>';
+        }).join('') +
+      '</div>';
+    }
+    if (linkItems) {
+      processLinksHtml = '<div class="process-links">' +
+        '<div class="process-links-label">\uD83D\uDD17 过程链接 Process Links</div>' +
+        linkItems +
+      '</div>';
+    }
+  }
+
+  const backHtml = '<div class="card-face card-back"><div class="back-inner">' +
+    '<div class="back-title">' + card.id + ' ' + card.name + '</div>' +
+    '<div class="itto-section"><div class="itto-label">\uD83D\uDCE5 输入 Inputs</div><div class="itto-chips">' + inputChips + '</div></div>' +
+    '<div class="itto-section"><div class="itto-label">\uD83D\uDD27 工具与技术 Tools</div><div class="itto-chips">' + toolChips + '</div>' +
+    toolsDetailHtml + '</div>' +
+    '<div class="itto-section"><div class="itto-label">\uD83D\uDCE4 输出 Outputs</div><div class="itto-chips">' + outputChips + '</div></div>' +
+    (card.keyPoints ? '<div class="key-points"><div class="key-points-label">\uD83D\uDCA1 关键要点</div><div class="key-points-text">' + card.keyPoints + '</div></div>' : '') +
+    (card.mnemonic ? '<div class="mnemonic-section"><div class="mnemonic-label">速记口诀</div><div class="mnemonic-text">' + card.mnemonic + '</div></div>' : '') +
+    formulasHtml +
+    examTipsHtml +
+    processLinksHtml +
+    '</div></div>';
+
+  stage.innerHTML = '<div class="card-body' + (state.flipped ? ' flipped' : '') + '" id="cardBody">' + frontHtml + backHtml + '</div>';
+
+  // 点击翻转
+  document.getElementById('cardBody').addEventListener('click', function(e) {
+    if (e.target.closest('.tools-detail-title')) return;
+    toggleFlip();
+  });
+
+  // 更新操作按钮状态
+  updateActionButtons(card);
+}
+
+/* 更新操作按钮状态 */
+function updateActionButtons(card) {
+  const btnM = document.getElementById('btnMastered');
+  const btnF = document.getElementById('btnFav');
+  const btnR = document.getElementById('btnReview');
+
+  btnM.className = 'action-btn' + (card && state.mastered.has(card.id) ? ' mastered-active' : '');
+  btnR.className = 'action-btn' + (card && state.review.has(card.id) ? ' review-active' : '');
+
+  if (card && state.favorites.has(card.id)) {
+    btnF.className = 'action-btn fav-active';
+    btnF.innerHTML = '<span class="icon">★</span><span>已收藏</span>';
+  } else {
+    btnF.className = 'action-btn';
+    btnF.innerHTML = '<span class="icon">☆</span><span>收藏</span>';
+  }
+}
+
+/* 翻转卡片 */
+function toggleFlip() {
+  state.flipped = !state.flipped;
+  const body = document.getElementById('cardBody');
+  if (body) {
+    body.classList.toggle('flipped', state.flipped);
+  }
+}
+
+/* 展开/收起工具详情 */
+function toggleToolsDetail(uid) {
+  const content = document.getElementById(uid + '_content');
+  const arrow = document.getElementById(uid + '_arrow');
+  const title = arrow.parentElement;
+  if (content) {
+    const isOpen = content.classList.contains('open');
+    content.classList.toggle('open', !isOpen);
+    title.classList.toggle('open', !isOpen);
+  }
+}
+
+/* 导航到指定索引 */
+function navigateTo(index) {
+  const cards = getFilteredCards();
+  if (cards.length === 0) return;
+
+  state.flipped = false;
+  const stage = document.getElementById('cardStage');
+  stage.classList.add('fading');
+
+  setTimeout(() => {
+    state.currentIndex = index;
+    if (state.currentIndex >= cards.length) state.currentIndex = 0;
+    if (state.currentIndex < 0) state.currentIndex = cards.length - 1;
+    renderCard();
+    stage.classList.remove('fading');
+  }, 180);
+}
+
+/* 下一张 */
+function nextCard() {
+  navigateTo(state.currentIndex + 1);
+}
+
+/* 上一张 */
+function prevCard() {
+  navigateTo(state.currentIndex - 1);
+}
+
+/* 切换模式 */
+function setMode(mode) {
+  state.mode = mode;
+  state.currentIndex = 0;
+  state.flipped = false;
+  if (mode === 'random') generateShuffle();
+  saveState();
+  updateModeTabs();
+  renderCard();
+}
+
+/* 更新模式标签样式 */
+function updateModeTabs() {
+  document.querySelectorAll('.mode-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.mode === state.mode);
+  });
+}
+
+/* 设置过程组筛选 */
+function setGroupFilter(group) {
+  state.groupFilter = group;
+  state.currentIndex = 0;
+  state.flipped = false;
+  saveState();
+  renderFilters();
+  renderCard();
+}
+
+/* 设置知识领域筛选 */
+function setAreaFilter(area) {
+  state.areaFilter = area;
+  state.currentIndex = 0;
+  state.flipped = false;
+  saveState();
+  renderFilters();
+  renderCard();
+}
+
+/* 切换掌握状态 */
+function toggleMastered() {
+  const cards = getFilteredCards();
+  if (cards.length === 0) return;
+  const card = cards[state.currentIndex];
+  if (state.mastered.has(card.id)) {
+    state.mastered.delete(card.id);
+  } else {
+    state.mastered.add(card.id);
+    state.review.delete(card.id); // 掌握后移除复习
+  }
+  saveState();
+  renderStats();
+  renderCard();
+}
+
+/* 切换复习状态 */
+function toggleReview() {
+  const cards = getFilteredCards();
+  if (cards.length === 0) return;
+  const card = cards[state.currentIndex];
+  if (state.review.has(card.id)) {
+    state.review.delete(card.id);
+  } else {
+    state.review.add(card.id);
+    state.mastered.delete(card.id); // 复习中移除掌握
+  }
+  saveState();
+  renderStats();
+  renderCard();
+}
+
+/* 切换收藏状态 */
+function toggleFavorite() {
+  const cards = getFilteredCards();
+  if (cards.length === 0) return;
+  const card = cards[state.currentIndex];
+  if (state.favorites.has(card.id)) {
+    state.favorites.delete(card.id);
+  } else {
+    state.favorites.add(card.id);
+  }
+  saveState();
+  renderStats();
+  renderCard();
+}
+
+/* ============================================================
+   事件绑定
+   ============================================================ */
+
+// 模式标签
+document.getElementById('modeTabs').addEventListener('click', function(e) {
+  const tab = e.target.closest('.mode-tab');
+  if (tab && tab.dataset.mode) setMode(tab.dataset.mode);
+});
+
+// 筛选折叠
+document.getElementById('filterToggle').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.getElementById('filterPanel').classList.toggle('open');
+});
+
+// 过程组筛选
+document.getElementById('groupFilters').addEventListener('click', function(e) {
+  const chip = e.target.closest('.filter-chip');
+  if (chip && chip.dataset.group) setGroupFilter(chip.dataset.group);
+});
+
+// 知识领域筛选
+document.getElementById('areaFilters').addEventListener('click', function(e) {
+  const chip = e.target.closest('.filter-chip');
+  if (chip && chip.dataset.area) setAreaFilter(chip.dataset.area);
+});
+
+// 导航按钮
+document.getElementById('prevBtn').addEventListener('click', prevCard);
+document.getElementById('nextBtn').addEventListener('click', nextCard);
+
+// 重排按钮
+document.getElementById('shuffleBtn').addEventListener('click', function() {
+  generateShuffle();
+  state.currentIndex = 0;
+  state.flipped = false;
+  renderCard();
+});
+
+// 底部操作按钮
+document.getElementById('btnMastered').addEventListener('click', toggleMastered);
+document.getElementById('btnFlip').addEventListener('click', toggleFlip);
+document.getElementById('btnFav').addEventListener('click', toggleFavorite);
+document.getElementById('btnReview').addEventListener('click', toggleReview);
+
+// 键盘快捷键
+document.addEventListener('keydown', function(e) {
+  // 忽略输入框中的按键
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+  switch(e.key) {
+    case 'ArrowLeft':  e.preventDefault(); prevCard(); break;
+    case 'ArrowRight': e.preventDefault(); nextCard(); break;
+    case ' ':          e.preventDefault(); toggleFlip(); break;
+    case '1':          toggleMastered(); break;
+    case '2':          toggleReview(); break;
+    case '3':          toggleFavorite(); break;
+  }
+});
+
+// 触摸滑动支持
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+document.getElementById('cardStage').addEventListener('touchstart', function(e) {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+document.getElementById('cardStage').addEventListener('touchend', function(e) {
+  touchEndX = e.changedTouches[0].screenX;
+  touchEndY = e.changedTouches[0].screenY;
+  const dx = touchEndX - touchStartX;
+  const dy = touchEndY - touchStartY;
+  // 只在水平滑动距离大于垂直滑动时触发（防止与滚动冲突）
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    if (dx < 0) nextCard();
+    else prevCard();
+  }
+}, { passive: true });
+
+/* ============================================================
+   初始化
+   ============================================================ */
+function init() {
+  loadState();
+  updateModeTabs();
+  renderStats();
+  renderFilters();
+
+  // 随机模式生成排列
+  if (state.mode === 'random') generateShuffle();
+
+  renderCard();
+}
+
+init();
+</script>
+</body>
+</html>
